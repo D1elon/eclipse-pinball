@@ -89,6 +89,9 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+/* the UA stylesheet's [hidden]{display:none} loses to any explicit display
+   rule (e.g. .btn{display:inline-flex}), so make it win */
+[hidden]{display:none!important}
 /* 112.5% of the user's base size = 18px by default, and every rem below
    scales with it. Using a percentage (not a px value) keeps browser
    font-size preferences working. */
@@ -271,8 +274,8 @@ header.nav.stuck{border-bottom-color:var(--line);background:rgba(5,4,12,.92)}
   .corona{width:min(68vw,290px);top:26%;translate:-50% -50%}
   .hero-in::before{
     inset:-14% -10%;
-    background:radial-gradient(ellipse 80% 52% at 50% 72%,
-      rgba(5,4,12,.92) 0%,rgba(5,4,12,.7) 60%,transparent 82%);
+    background:radial-gradient(ellipse 84% 54% at 50% 72%,
+      rgba(5,4,12,.96) 0%,rgba(5,4,12,.85) 58%,rgba(5,4,12,.4) 76%,transparent 88%);
   }
 }
 
@@ -280,8 +283,8 @@ header.nav.stuck{border-bottom-color:var(--line);background:rgba(5,4,12,.92)}
 /* soft scrim so hero copy stays legible wherever the corona lands */
 .hero-in::before{
   content:'';position:absolute;inset:-12% -8%;z-index:-1;pointer-events:none;
-  background:radial-gradient(ellipse 72% 58% at 50% 60%,
-    rgba(5,4,12,.82) 0%,rgba(5,4,12,.55) 55%,transparent 78%);
+  background:radial-gradient(ellipse 74% 60% at 50% 62%,
+    rgba(5,4,12,.94) 0%,rgba(5,4,12,.78) 52%,rgba(5,4,12,.35) 72%,transparent 84%);
 }
 .hero .wm{
   width:min(92%,780px);height:auto;margin:0 auto 1.6rem;color:#fff;
@@ -299,22 +302,27 @@ header.nav.stuck{border-bottom-color:var(--line);background:rgba(5,4,12,.92)}
   margin:0 0 1.5rem;padding-left:.42em;
 }
 .hero .sub{
-  color:var(--dim);max-width:56ch;margin:0 auto 2.2rem;font-size:1.24rem;
+  color:var(--text);max-width:56ch;margin:0 auto 2.2rem;font-size:1.24rem;
+  text-shadow:0 1px 14px rgba(5,4,12,.95),0 0 3px rgba(5,4,12,.8);
 }
 .hero .sub strong{color:var(--amber);font-weight:600}
 .chips{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin:0 0 2.4rem}
 .chip{
   font-family:var(--mono);font-size:.84rem;letter-spacing:.12em;text-transform:uppercase;
-  padding:.55rem 1.1rem;border-radius:999px;
-  border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--dim);
+  padding:.6rem 1.15rem;border-radius:999px;
+  border:1px solid rgba(150,180,255,.3);
+  background:rgba(8,6,18,.72);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  color:var(--text);
 }
-.chip b{color:var(--cyan);font-weight:400}
+.chip b{color:var(--cyan);font-weight:400;text-shadow:0 0 12px rgba(34,224,255,.5)}
 .hero-cta{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap}
 
 .scroll-hint{
   position:absolute;bottom:1.2rem;left:50%;translate:-50% 0;
   font-family:var(--mono);font-size:.76rem;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--faint);animation:bob 2.6s ease-in-out infinite;
+  text-transform:uppercase;color:var(--dim);animation:bob 2.6s ease-in-out infinite;
+  text-shadow:0 1px 10px rgba(5,4,12,.9);
 }
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
@@ -411,6 +419,23 @@ select.sort:focus{outline:none;border-color:var(--cyan)}
 .era-modern{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
 .era-dmd{background:var(--violet);box-shadow:0 0 10px var(--violet)}
 .era-classic{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+
+/* ---- collapsed lineup ----
+   The cap is pure CSS so it's responsive without JS needing to know the
+   viewport: 12 cards on desktop (3 rows of 4), 6 on phones (6 rows of 1). */
+.grid-wrap{position:relative}
+.game-grid:not(.expanded) .game:nth-child(n+13){display:none}
+@media(max-width:700px){
+  .game-grid:not(.expanded) .game:nth-child(n+7){display:none}
+}
+.grid-fade{
+  position:absolute;left:0;right:0;bottom:0;height:150px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(5,4,12,0),rgba(5,4,12,.85) 60%,var(--void));
+}
+.grid-more{text-align:center;margin-top:1.5rem}
+.grid-more .btn{gap:.7rem}
+.chev{transition:transform .25s ease}
+#showAll[aria-expanded="true"] .chev{transform:rotate(180deg)}
 
 .empty{
   grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--faint);
@@ -681,7 +706,18 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
       </select>
     </div>
 
-    <ul class="game-grid" id="grid" aria-live="polite"></ul>
+    <div class="grid-wrap">
+      <ul class="game-grid" id="grid" aria-live="polite"></ul>
+      <div class="grid-fade" id="gridFade" hidden aria-hidden="true"></div>
+    </div>
+
+    <div class="grid-more">
+      <button class="btn" id="showAll" type="button" aria-expanded="false" aria-controls="grid" hidden>
+        <span id="showAllLabel">Show all machines</span>
+        <svg class="chev" viewBox="0 0 24 24" width="16" height="16" fill="none"
+             stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
 
     <div class="legend rv">
       <span><i class="era-modern"></i>2010 &amp; up</span>
@@ -879,7 +915,7 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
   var GAMES_URL = 'games.json';
   var SNAPSHOT = {"location":{"id":15825,"name":"Eclipse Pinball","street":"1310 Altamont Ave","city":"Richmond","state":"VA","zip":"23230","phone":"804-420-2188"},"updated":"2026-08-03","source":"https://pinballmap.com/map/?by_location_id=15825","machines":[{"name":"AC/DC","edition":"Premium","manufacturer":"Stern","year":2012},{"name":"Alien","edition":"Remake","manufacturer":"Pinball Brothers","year":2021},{"name":"Black Knight: Sword of Rage","edition":"LE","manufacturer":"Stern","year":2019},{"name":"Bone Busters Inc","edition":null,"manufacturer":"Gottlieb","year":1989},{"name":"Bram Stoker's Dracula","edition":null,"manufacturer":"Williams","year":1993},{"name":"Cactus Canyon","edition":"Remake Special","manufacturer":"Chicago Gaming","year":2021},{"name":"Cirqus Voltaire","edition":null,"manufacturer":"Bally","year":1997},{"name":"Class of 1812","edition":null,"manufacturer":"Gottlieb","year":1991},{"name":"Creature from the Black Lagoon","edition":null,"manufacturer":"Bally","year":1992},{"name":"Devil's Dare","edition":null,"manufacturer":"Gottlieb","year":1982},{"name":"Dune","edition":null,"manufacturer":"Barrels of Fun","year":2025},{"name":"Elvira's House of Horrors","edition":"Premium","manufacturer":"Stern","year":2019},{"name":"Evil Dead","edition":null,"manufacturer":"Spooky","year":2024},{"name":"Foo Fighters","edition":"Premium","manufacturer":"Stern","year":2023},{"name":"Freddy: A Nightmare on Elm Street","edition":null,"manufacturer":"Gottlieb","year":1994},{"name":"Ghostbusters","edition":"Pro","manufacturer":"Stern","year":2016},{"name":"Godzilla","edition":"Premium","manufacturer":"Stern","year":2021},{"name":"Gorgar","edition":null,"manufacturer":"Williams","year":1979},{"name":"Halloween","edition":"CE","manufacturer":"Spooky","year":2021},{"name":"Haunted House","edition":null,"manufacturer":"Gottlieb","year":1982},{"name":"Iron Maiden: Legacy of the Beast","edition":"Premium","manufacturer":"Stern","year":2018},{"name":"JAWS","edition":"Premium","manufacturer":"Stern","year":2024},{"name":"John Wick","edition":"Premium","manufacturer":"Stern","year":2024},{"name":"King Kong: Myth of Terror Island","edition":"LE","manufacturer":"Stern","year":2025},{"name":"Mary Shelley's Frankenstein","edition":null,"manufacturer":"Sega","year":1995},{"name":"Medieval Madness","edition":"Remake Merlin Edition","manufacturer":"Chicago Gaming","year":2025},{"name":"Metallica Remastered","edition":"Premium","manufacturer":"Stern","year":2024},{"name":"Monster Bash","edition":"Remake","manufacturer":"Chicago Gaming","year":2018},{"name":"NASCAR","edition":null,"manufacturer":"Stern","year":2005},{"name":"Phantom of the Opera","edition":null,"manufacturer":"Data East","year":1990},{"name":"Pokémon","edition":"Premium","manufacturer":"Stern","year":2026},{"name":"Pulp Fiction","edition":"SE","manufacturer":"Chicago Gaming","year":2023},{"name":"Rescue 911","edition":null,"manufacturer":"Gottlieb","year":1994},{"name":"Rick and Morty","edition":"Blood Sucker Edition","manufacturer":"Spooky","year":2020},{"name":"Robocop","edition":null,"manufacturer":"Data East","year":1989},{"name":"Scared Stiff","edition":null,"manufacturer":"Bally","year":1996},{"name":"Sonic the Hedgehog","edition":"Arcade","manufacturer":"Jersey Jack","year":2026},{"name":"Space Jam","edition":null,"manufacturer":"Sega","year":1996},{"name":"Street Fighter II","edition":null,"manufacturer":"Gottlieb","year":1993},{"name":"Super Mario Bros.","edition":null,"manufacturer":"Gottlieb","year":1992},{"name":"Tales from the Crypt","edition":null,"manufacturer":"Data East","year":1993},{"name":"Teenage Mutant Ninja Turtles","edition":null,"manufacturer":"Data East","year":1991},{"name":"The Addams Family","edition":null,"manufacturer":"Bally","year":1992},{"name":"The Mandalorian","edition":"Premium","manufacturer":"Stern","year":2021},{"name":"The Texas Chainsaw Massacre","edition":"CE","manufacturer":"Spooky","year":2024},{"name":"The Walking Dead Remastered","edition":"Premium","manufacturer":"Stern","year":2025},{"name":"Total Nuclear Annihilation","edition":"CE","manufacturer":"Spooky","year":2022},{"name":"Twilight Zone","edition":null,"manufacturer":"Bally","year":1993},{"name":"Venom","edition":"Premium","manufacturer":"Stern","year":2023},{"name":"WWF Royal Rumble","edition":null,"manufacturer":"Data East","year":1994}]};
 
-  var state = { machines: [], era: 'all', q: '', sort: 'az' };
+  var state = { machines: [], era: 'all', q: '', sort: 'az', expanded: false };
 
   var grid    = document.getElementById('grid');
   var qEl     = document.getElementById('q');
@@ -913,6 +949,7 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
 
     if (!list.length){
       grid.innerHTML = '<li class="empty">No machines match that search.</li>';
+      updateMore(0);   // otherwise the button lingers from the previous render
       return;
     }
 
@@ -926,7 +963,53 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
           '</span> · ' + esc(m.year) + '</div>' +
       '</li>';
     }).join('');
+
+    updateMore(list.length);
   }
+
+  /* ---------- show all / show fewer ----------
+     The visible cap lives in CSS (12 desktop / 6 mobile). This only decides
+     whether the button and fade are needed, and what the button should say. */
+  var mqSmall  = window.matchMedia('(max-width:700px)');
+  var moreBtn  = document.getElementById('showAll');
+  var moreLbl  = document.getElementById('showAllLabel');
+  var gridFade = document.getElementById('gridFade');
+
+  function cap(){ return mqSmall.matches ? 6 : 12; }
+
+  function updateMore(shown){
+    var hasHidden = shown > cap();
+    if (!hasHidden){
+      moreBtn.hidden = true;
+      gridFade.hidden = true;
+      return;
+    }
+    moreBtn.hidden = false;
+    if (state.expanded){
+      grid.classList.add('expanded');
+      gridFade.hidden = true;
+      moreLbl.textContent = 'Show fewer';
+      moreBtn.setAttribute('aria-expanded','true');
+    } else {
+      grid.classList.remove('expanded');
+      gridFade.hidden = false;
+      moreLbl.textContent = 'Show all ' + shown + ' machines';
+      moreBtn.setAttribute('aria-expanded','false');
+    }
+  }
+
+  moreBtn.addEventListener('click', function(){
+    state.expanded = !state.expanded;
+    render();
+    if (!state.expanded){
+      // collapsing from far down the list would strand you in the footer
+      document.getElementById('games').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+
+  // the cap changes on rotate / resize across the breakpoint
+  (mqSmall.addEventListener ? mqSmall.addEventListener.bind(mqSmall,'change')
+                            : mqSmall.addListener.bind(mqSmall))(function(){ render(); });
 
   function setData(data){
     state.machines = (data && data.machines) || [];
