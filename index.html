@@ -47,12 +47,21 @@
   "publicAccess": true,
   "isAccessibleForFree": false,
   "description": "All-ages pinball arcade in Scott's Addition with 50+ machines on free play.",
-  "openingHoursSpecification": [{
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-    "opens": "11:00",
-    "closes": "20:00"
-  }]
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday"],
+      "opens": "11:00",
+      "closes": "20:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Sunday","Monday"],
+      "opens": "11:00",
+      "closes": "19:00"
+    }
+  ],
+  "email": "contact@eclipsepinball.com"
 }
 </script>
 
@@ -495,8 +504,27 @@ select.sort:focus{outline:none;border-color:var(--cyan)}
   .date-block .day{font-size:2.9rem}
 }
 
+/* ---- private events ---- */
+.private{
+  margin-top:1.6rem;padding:1.9rem;border-radius:var(--r);
+  display:flex;flex-wrap:wrap;gap:1.4rem;align-items:center;justify-content:space-between;
+  background:linear-gradient(140deg,rgba(34,224,255,.09),rgba(138,92,255,.05) 60%,rgba(255,255,255,.02));
+  border:1px solid rgba(34,224,255,.26);
+}
+.private-body{max-width:56ch}
+.private h3{
+  font-family:var(--display);font-weight:900;font-size:1.4rem;
+  letter-spacing:.02em;margin:0 0 .6rem;color:#fff;
+}
+.private p:not(.tag){margin:0;color:var(--dim);font-size:1.08rem}
+.private .tag{
+  margin:0 0 .5rem;font-family:var(--mono);font-size:.84rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);
+}
+.private a{word-break:break-word}
+
 .ifpa{
-  margin-top:2.2rem;padding:1.5rem;border-radius:var(--r);
+  margin-top:1.6rem;padding:1.5rem;border-radius:var(--r);
   border:1px dashed var(--line);background:rgba(255,255,255,.02);
   display:flex;flex-wrap:wrap;gap:1.2rem;align-items:center;justify-content:space-between;
 }
@@ -515,9 +543,15 @@ select.sort:focus{outline:none;border-color:var(--cyan)}
 }
 .info dd{margin:0;font-size:1.14rem;color:var(--text)}
 .info dd .muted{color:var(--faint);font-size:1rem;display:block;margin-top:.3rem}
-.hours-all{
-  display:block;font-family:var(--display);font-weight:700;
-  font-size:1.14rem;letter-spacing:.02em;color:#fff;line-height:1.4;
+.hours-tbl{width:100%;border-collapse:collapse;font-size:1.1rem}
+.hours-tbl td{padding:.36rem 0;color:#fff;font-weight:500}
+.hours-tbl td:last-child{
+  text-align:right;font-family:var(--mono);font-weight:400;
+  font-size:.98rem;color:var(--dim);white-space:nowrap;
+}
+@media(max-width:420px){
+  .hours-tbl td,.hours-tbl td:last-child{display:block;text-align:left}
+  .hours-tbl td:last-child{padding-top:0;padding-bottom:.6rem}
 }
 .map-frame{
   border-radius:var(--r);overflow:hidden;border:1px solid var(--line);
@@ -601,7 +635,7 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
       <span class="chip"><b>$15</b> All-Day Free Play</span>
       <span class="chip"><b>All Ages</b> Welcome</span>
       <span class="chip"><b id="chipCount">50</b> Machines</span>
-      <span class="chip">Open Daily <b>11–8</b></span>
+      <span class="chip">Open <b>7 Days</b></span>
       <span class="chip">Scott's Addition</span>
     </div>
     <div class="hero-cta">
@@ -703,6 +737,17 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
       </div>
     </article>
 
+    <div class="private rv">
+      <div class="private-body">
+        <p class="tag">Book the room</p>
+        <h3>Private Events</h3>
+        <p>Birthday, work night out, or the whole floor to yourselves — contact us
+          for private events at
+          <a href="mailto:contact@eclipsepinball.com">contact@eclipsepinball.com</a>.</p>
+      </div>
+      <a class="btn alt" href="mailto:contact@eclipsepinball.com?subject=Private%20event%20at%20Eclipse%20Pinball">Email Us</a>
+    </div>
+
     <div class="ifpa rv">
       <p>More tournaments and league nights get announced on Instagram, and
         sanctioned results are submitted to the International Flipper Pinball
@@ -734,8 +779,11 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
           <div>
             <dt>Hours</dt>
             <dd>
-              <span class="hours-all">Open daily · 11:00 AM – 8:00 PM</span>
-              <span class="muted">Seven days a week, every week.
+              <table class="hours-tbl">
+                <tr><td>Sunday &amp; Monday</td><td>11:00 AM – 7:00 PM</td></tr>
+                <tr><td>Tuesday – Saturday</td><td>11:00 AM – 8:00 PM</td></tr>
+              </table>
+              <span class="muted">Open every day of the week.
                 Tournament nights run later — see Events.</span>
             </dd>
           </div>
@@ -752,7 +800,7 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
           <div>
             <dt>Contact</dt>
             <dd><a href="tel:+18044202188">804-420-2188</a>
-              <span class="muted"><!-- TODO(client): real email -->hello@eclipsepinball.com</span></dd>
+              <span class="muted"><a href="mailto:contact@eclipsepinball.com">contact@eclipsepinball.com</a></span></dd>
           </div>
         </dl>
         <p style="margin-top:2rem">
