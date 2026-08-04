@@ -1,0 +1,315 @@
+{
+ "location": {
+  "id": 15825,
+  "name": "Eclipse Pinball",
+  "street": "1310 Altamont Ave",
+  "city": "Richmond",
+  "state": "VA",
+  "zip": "23230",
+  "phone": "804-420-2188"
+ },
+ "updated": "2026-08-03",
+ "source": "https://pinballmap.com/map/?by_location_id=15825",
+ "machines": [
+  {
+   "name": "AC/DC",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2012
+  },
+  {
+   "name": "Alien",
+   "edition": "Remake",
+   "manufacturer": "Pinball Brothers",
+   "year": 2021
+  },
+  {
+   "name": "Black Knight: Sword of Rage",
+   "edition": "LE",
+   "manufacturer": "Stern",
+   "year": 2019
+  },
+  {
+   "name": "Bone Busters Inc",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1989
+  },
+  {
+   "name": "Bram Stoker's Dracula",
+   "edition": null,
+   "manufacturer": "Williams",
+   "year": 1993
+  },
+  {
+   "name": "Cactus Canyon",
+   "edition": "Remake Special",
+   "manufacturer": "Chicago Gaming",
+   "year": 2021
+  },
+  {
+   "name": "Cirqus Voltaire",
+   "edition": null,
+   "manufacturer": "Bally",
+   "year": 1997
+  },
+  {
+   "name": "Class of 1812",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1991
+  },
+  {
+   "name": "Creature from the Black Lagoon",
+   "edition": null,
+   "manufacturer": "Bally",
+   "year": 1992
+  },
+  {
+   "name": "Devil's Dare",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1982
+  },
+  {
+   "name": "Dune",
+   "edition": null,
+   "manufacturer": "Barrels of Fun",
+   "year": 2025
+  },
+  {
+   "name": "Elvira's House of Horrors",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2019
+  },
+  {
+   "name": "Evil Dead",
+   "edition": null,
+   "manufacturer": "Spooky",
+   "year": 2024
+  },
+  {
+   "name": "Foo Fighters",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2023
+  },
+  {
+   "name": "Freddy: A Nightmare on Elm Street",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1994
+  },
+  {
+   "name": "Ghostbusters",
+   "edition": "Pro",
+   "manufacturer": "Stern",
+   "year": 2016
+  },
+  {
+   "name": "Godzilla",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2021
+  },
+  {
+   "name": "Gorgar",
+   "edition": null,
+   "manufacturer": "Williams",
+   "year": 1979
+  },
+  {
+   "name": "Halloween",
+   "edition": "CE",
+   "manufacturer": "Spooky",
+   "year": 2021
+  },
+  {
+   "name": "Haunted House",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1982
+  },
+  {
+   "name": "Iron Maiden: Legacy of the Beast",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2018
+  },
+  {
+   "name": "JAWS",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2024
+  },
+  {
+   "name": "John Wick",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2024
+  },
+  {
+   "name": "King Kong: Myth of Terror Island",
+   "edition": "LE",
+   "manufacturer": "Stern",
+   "year": 2025
+  },
+  {
+   "name": "Mary Shelley's Frankenstein",
+   "edition": null,
+   "manufacturer": "Sega",
+   "year": 1995
+  },
+  {
+   "name": "Medieval Madness",
+   "edition": "Remake Merlin Edition",
+   "manufacturer": "Chicago Gaming",
+   "year": 2025
+  },
+  {
+   "name": "Metallica Remastered",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2024
+  },
+  {
+   "name": "Monster Bash",
+   "edition": "Remake",
+   "manufacturer": "Chicago Gaming",
+   "year": 2018
+  },
+  {
+   "name": "NASCAR",
+   "edition": null,
+   "manufacturer": "Stern",
+   "year": 2005
+  },
+  {
+   "name": "Phantom of the Opera",
+   "edition": null,
+   "manufacturer": "Data East",
+   "year": 1990
+  },
+  {
+   "name": "Pokémon",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2026
+  },
+  {
+   "name": "Pulp Fiction",
+   "edition": "SE",
+   "manufacturer": "Chicago Gaming",
+   "year": 2023
+  },
+  {
+   "name": "Rescue 911",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1994
+  },
+  {
+   "name": "Rick and Morty",
+   "edition": "Blood Sucker Edition",
+   "manufacturer": "Spooky",
+   "year": 2020
+  },
+  {
+   "name": "Robocop",
+   "edition": null,
+   "manufacturer": "Data East",
+   "year": 1989
+  },
+  {
+   "name": "Scared Stiff",
+   "edition": null,
+   "manufacturer": "Bally",
+   "year": 1996
+  },
+  {
+   "name": "Sonic the Hedgehog",
+   "edition": "Arcade",
+   "manufacturer": "Jersey Jack",
+   "year": 2026
+  },
+  {
+   "name": "Space Jam",
+   "edition": null,
+   "manufacturer": "Sega",
+   "year": 1996
+  },
+  {
+   "name": "Street Fighter II",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1993
+  },
+  {
+   "name": "Super Mario Bros.",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1992
+  },
+  {
+   "name": "Tales from the Crypt",
+   "edition": null,
+   "manufacturer": "Data East",
+   "year": 1993
+  },
+  {
+   "name": "Teenage Mutant Ninja Turtles",
+   "edition": null,
+   "manufacturer": "Data East",
+   "year": 1991
+  },
+  {
+   "name": "The Addams Family",
+   "edition": null,
+   "manufacturer": "Bally",
+   "year": 1992
+  },
+  {
+   "name": "The Mandalorian",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2021
+  },
+  {
+   "name": "The Texas Chainsaw Massacre",
+   "edition": "CE",
+   "manufacturer": "Spooky",
+   "year": 2024
+  },
+  {
+   "name": "The Walking Dead Remastered",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2025
+  },
+  {
+   "name": "Total Nuclear Annihilation",
+   "edition": "CE",
+   "manufacturer": "Spooky",
+   "year": 2022
+  },
+  {
+   "name": "Twilight Zone",
+   "edition": null,
+   "manufacturer": "Bally",
+   "year": 1993
+  },
+  {
+   "name": "Venom",
+   "edition": "Premium",
+   "manufacturer": "Stern",
+   "year": 2023
+  },
+  {
+   "name": "WWF Royal Rumble",
+   "edition": null,
+   "manufacturer": "Data East",
+   "year": 1994
+  }
+ ]
+}
