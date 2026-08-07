@@ -87,7 +87,6 @@ Every one is marked with `TODO(client)` in `index.html`. Search for that string.
 
 | What | Where | Status |
 |---|---|---|
-| Email address | `#visit` contact | **Placeholder** — `hello@eclipsepinball.com` |
 | Facebook URL | footer `.social` | **Placeholder** — points at the bare domain |
 | `og:image` | `<head>` | **Missing** — add a 1200×630 photo at `/og-image.jpg` |
 
@@ -97,12 +96,32 @@ Confirmed by the client or pulled from the Pinball Map listing — not invented:
 
 - 1310 Altamont Ave, Richmond, VA 23230 (Scott's Addition)
 - 804-420-2188
-- **Open daily, 11:00 AM – 8:00 PM**
+- **Sun & Mon 11:00 AM – 7:00 PM; Tue–Sat 11:00 AM – 8:00 PM**
 - $15 entry, all games on free play
 - All ages
 - 50 machines as of Aug 3, 2026
+- Anti-reflective glass on every game (confirmed Aug 4, 2026)
 - Instagram: [@eclipsepinball](https://www.instagram.com/eclipsepinball/)
+- Email: contact@eclipsepinball.com
 - Formerly Wax Moon; reopened July 4 as Eclipse Pinball
+
+## The FAQ
+
+Seven questions in a native `<details>` accordion in the `#faq` section — no JS,
+keyboard-accessible for free, and it works with scripts disabled.
+
+**The answers came from Alex and Andrew's thread**, not from guesswork. Editing one
+means editing it in **two places**: the visible `<details>` block *and* the
+`FAQPage` JSON-LD in the `<head>`. Google requires the structured data to match the
+visible copy — a mismatch can cost the rich result. Search `"@type": "FAQPage"`.
+
+### One question is parked
+
+**"Can I bring in my own food or drinks?"** is written and sitting commented out
+just below the private-event question. Andrew said he'd rather not raise it on the
+site; Alex noted it comes up repeatedly and Andrew thumbs-up'd both of his replies,
+so it was never actually settled. To publish it, delete the `<!--` and `-->` around
+the block — and add the matching entry to the JSON-LD.
 
 ## Updating the featured event
 
@@ -122,9 +141,8 @@ tournament that already happened. Removing the `data-ends` attribute disables
 that behaviour.
 
 > **Worth confirming (1):** Google Business Profile lists Eclipse as closing at
-> **7:00 PM**, "updated by this business 3 weeks ago" — which conflicts with the
-> 11–8 the client gave us. The site uses 11–8 as instructed, but someone should
-> reconcile the two, since Google is what most people actually see.
+> **7:00 PM**. That now matches the site on Sun/Mon but not Tue–Sat. Google should
+> be updated to the split schedule — it's what most people check before driving over.
 >
 > **Worth confirming (2):** the tournament starts at 7:00 PM but the posted closing
 > time is 8:00 PM. Presumably the room stays open past close on tournament
@@ -146,9 +164,15 @@ that behaviour.
   `prefers-reduced-motion: reduce`.
 - **Accessibility** — the era filter uses `aria-pressed`, the grid is `aria-live`,
   the mobile menu manages `aria-expanded`, and focus rings are visible throughout.
-- **The map** is an OpenStreetMap embed (no API key, no tracking) with a CSS filter
-  to match the dark theme. The marker sits at **37.565503, -77.471582** — the
-  geocoded position of 1310 Altamont Ave, verified against OSM's own building
-  data. The `bbox` is that point ±250m framed 4:3; if you change the frame's
-  aspect ratio, recompute the bbox to match or the map will letterbox.
-  Swap for a Google Maps embed if you'd rather.
+- **The map** is a Google Maps embed using the keyless `?output=embed` form — no
+  API key, no billing account, no GCP project. A CSS `invert`/`hue-rotate` filter
+  on the iframe darkens it to match the theme. Querying by business name (not just
+  the address) makes the pin read "Eclipse Pinball".
+  *Trade-off:* this is now the site's only third-party request. Google sets cookies
+  and sees visitors' IPs. If that ever matters, the OpenStreetMap embed it replaced
+  is in git history and needs no key either.
+- **Directions links** carry `data-directions`. The HTML href is a plain Google Maps
+  directions URL so it works with JS off and on desktop; a small script swaps it for
+  `maps://` on iOS and `geo:` on Android so phones hand off to whatever maps app the
+  person actually uses. Desktop is left alone deliberately — a Mac would otherwise
+  launch the Apple Maps app when someone just wanted a map in their browser.

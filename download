@@ -1,0 +1,6 @@
+# nothing to build, but keep local noise out of the repo
+.DS_Store
+Thumbs.db
+node_modules/
+*.log
+.env
