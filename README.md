@@ -7,6 +7,10 @@ Dark 80s-arcade theme. No build step, no dependencies, no framework.
 index.html               the entire site (CSS + JS inlined, logos inlined as SVG/data-URI)
 games.json               the machine lineup the page renders
 tools/refresh-games.mjs  pulls a fresh lineup from the Pinball Map API
+tools/refresh-instagram.mjs  pulls recent IG posts and downloads the images
+instagram.json           the posts the page renders (hand-picked today)
+assets/ig/               local copies of the post images
+og-image.jpg             1200x630 social-share preview
 .github/workflows/       refresh + deploy to GitHub Pages
 CNAME                    the custom domain (www.eclipsepinball.com)
 DEPLOY.md                how to put this live on eclipsepinball.com
@@ -87,8 +91,8 @@ Every one is marked with `TODO(client)` in `index.html`. Search for that string.
 
 | What | Where | Status |
 |---|---|---|
-| Facebook URL | footer `.social` | **Placeholder** — points at the bare domain |
-| `og:image` | `<head>` | **Missing** — add a 1200×630 photo at `/og-image.jpg` |
+| Facebook URL | footer `.social` | **Placeholder**, points at the bare domain |
+| Instagram post links | `instagram.json` | **Placeholder**, all three link to the profile |
 
 ### What's already verified
 
@@ -176,3 +180,31 @@ that behaviour.
   `maps://` on iOS and `geo:` on Android so phones hand off to whatever maps app the
   person actually uses. Desktop is left alone deliberately — a Mac would otherwise
   launch the Apple Maps app when someone just wanted a map in their browser.
+
+## The Instagram section
+
+Three hand-picked posts, listed in `instagram.json`, with square images in
+`assets/ig/`. No API, no token, no third-party requests. The page fetches
+`instagram.json` the same way it fetches `games.json`, so nothing about the
+markup changes when the API is eventually connected.
+
+**To swap a post by hand:** drop a square JPEG in `assets/ig/` (900x900 is what
+the existing ones are) and edit the matching entry in `instagram.json`. Keep the
+`alt` text descriptive; it's what a screen reader announces.
+
+**A caveat worth knowing:** all three tiles currently link to the profile rather
+than to the individual posts, because the post URLs weren't available when they
+were added. Paste the real `instagram.com/p/XXXX` URLs into `permalink` when you
+have them and the tiles will deep-link properly.
+
+**When the API is connected**, `tools/refresh-instagram.mjs` overwrites
+`instagram.json` and the images in `assets/ig/` on every deploy. The hand-picked
+set is a stand-in, not a fallback, so back these three up first if you want to
+keep them.
+
+### Image prep
+
+Tiles render at `aspect-ratio:1` with `object-fit:cover`, meaning the browser
+centre-crops anything that isn't square. The flyer was cropped from the top by
+hand so the logo and date survived; a centre crop had cut the logo in half. Worth
+remembering for any text-heavy image.

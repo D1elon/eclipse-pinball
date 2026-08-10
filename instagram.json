@@ -1,0 +1,31 @@
+{
+ "handle": "eclipsepinball",
+ "_comment": "Hand-picked posts. tools/refresh-instagram.mjs overwrites this file once INSTAGRAM_TOKEN is set. To swap an image by hand: drop a square JPEG in assets/ig/ and point 'image' at it. 'permalink' should be the individual post URL (instagram.com/p/XXXX) when you have it; the profile URL is a safe fallback.",
+ "updated": null,
+ "posts": [
+  {
+   "image": "assets/ig/post-1.jpg",
+   "permalink": "https://www.instagram.com/eclipsepinball/",
+   "alt": "Flyer for Mistress of the Mooncade's Ladies Pinball Tournament at Eclipse Pinball, August 14th, $15, sign-up at 6 and games at 7, 1310 Altamont Avenue.",
+   "caption": "Mistress of the Mooncade, Aug 14",
+   "isVideo": false,
+   "timestamp": null
+  },
+  {
+   "image": "assets/ig/post-2.jpg",
+   "permalink": "https://www.instagram.com/eclipsepinball/",
+   "alt": "Close-up of the Sonic the Hedgehog pinball playfield lit up, with Sonic and Shadow artwork and the Seaside Hill and Sky Sanctuary stage targets.",
+   "caption": "Sonic the Hedgehog, on the floor now",
+   "isVideo": false,
+   "timestamp": null
+  },
+  {
+   "image": "assets/ig/post-3.jpg",
+   "permalink": "https://www.instagram.com/eclipsepinball/",
+   "alt": "A technician leaning over an open pinball playfield raised on its hinges, working on the wiring and mechanisms underneath.",
+   "caption": "Every machine gets looked after",
+   "isVideo": false,
+   "timestamp": null
+  }
+ ]
+}

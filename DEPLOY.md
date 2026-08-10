@@ -152,9 +152,71 @@ It runs on every push, daily at 09:00 UTC (5am ET), and on demand from the Actio
 
 ---
 
+## The Instagram feed
+
+The section between Events and Visit currently shows **three hand-picked posts**
+listed in `instagram.json`, with the images stored locally in `assets/ig/`. No
+API, no token, nothing to set up. It works today.
+
+Connecting the API is optional and only buys you one thing: the section updates
+itself instead of being edited by hand. Everything below is for that.
+
+**How it works:** a workflow step pulls your posts server-side, **downloads the
+images into `assets/ig/`**, and commits them. The site serves its own copies.
+Instagram's CDN URLs are signed and expire within days, so storing the URL would
+give you a grid of broken images by next week. Local copies also keep the page free
+of Meta scripts and tracking pixels.
+
+### Before you start
+
+**The Instagram account must be a Business or Creator account.** Personal accounts
+are no longer supported by any public Meta API. Convert it in the Instagram app
+under Settings → Account type and tools if it isn't already.
+
+### Setup
+
+1. <https://developers.facebook.com/apps> → **Create app** → app type **Business**
+2. Add the **Instagram** product, then open **API setup with Instagram Login**
+3. Under *Generate access tokens*, click **Add an Instagram account** and log in as
+   @eclipsepinball
+4. Click **Generate token** next to the connected account
+5. **Copy the token immediately** — Meta will not show it again
+6. Repo → **Settings → Secrets and variables → Actions → New repository secret**,
+   named exactly `INSTAGRAM_TOKEN`
+
+The next deploy picks it up. Trigger one from the Actions tab rather than waiting
+for the 09:00 UTC schedule.
+
+### Keeping the token alive
+
+Long-lived tokens expire after **60 days**. The script requests a fresh one on every
+run, but storing it back needs a token that can write secrets, which `GITHUB_TOKEN`
+cannot do.
+
+To make it self-sustaining: create a **fine-grained personal access token**
+(<https://github.com/settings/tokens?type=beta>) scoped to this repo with
+**Secrets: Read and write**, and add it as a secret named `GH_PAT`.
+
+**Without it everything still works** — you just regenerate `INSTAGRAM_TOKEN`
+manually every couple of months. The run log prints the days remaining.
+
+### Running it by hand
+
+```sh
+export INSTAGRAM_TOKEN="your-long-lived-token"
+node tools/refresh-instagram.mjs
+```
+
+It writes `instagram.json`, downloads the images, prunes ones no longer used, and
+saves the refreshed token to `.ig-token-new`. Any failure leaves the existing posts
+and images untouched.
+
+---
+
 ## After launch
 
 - Open the real domain on a phone, not just desktop.
-- Replace the remaining placeholders (see README): email address, Facebook URL, `og:image`.
-- Add a 1200×630 photo at `/og-image.jpg` so Instagram and Facebook link previews aren't blank.
+- Replace the remaining placeholders (see README): Facebook URL, Instagram post links.
+- Paste a link into Facebook or iMessage and confirm the preview card shows the
+  Sonic playfield photo (`og-image.jpg`).
 - To update anything, edit the file, `git commit`, `git push` — live in about a minute.
