@@ -56,16 +56,44 @@ jobs:
           fi
           node tools/refresh-games.mjs
 
-      - name: Commit the lineup if it changed
+      # Downloads the images into assets/ig/ so the site serves its own copies —
+      # Instagram's signed CDN URLs expire within days.
+      - name: Refresh Instagram posts
+        id: ig
+        continue-on-error: true # never block a deploy on Instagram
+        env:
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
         run: |
-          if git diff --quiet -- games.json; then
-            echo "Lineup unchanged — nothing to commit."
+          if [ -z "$INSTAGRAM_TOKEN" ]; then
+            echo "::notice::INSTAGRAM_TOKEN not set — the site shows the Follow panel instead."
+            exit 0
+          fi
+          node tools/refresh-instagram.mjs
+
+      # Instagram long-lived tokens last 60 days. The script hands back a fresh
+      # one on every run; storing it here means the token never expires as long
+      # as this workflow runs. Needs a PAT with "Secrets: write" as GH_PAT —
+      # without it the token still works, it just needs manual renewal.
+      - name: Store the refreshed Instagram token
+        if: steps.ig.outputs.new_token != '' && env.GH_PAT != ''
+        continue-on-error: true
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          gh secret set INSTAGRAM_TOKEN --body "${{ steps.ig.outputs.new_token }}"
+          echo "::notice::Instagram token refreshed and stored."
+
+      - name: Commit any content that changed
+        run: |
+          if git diff --quiet -- games.json instagram.json assets/ig; then
+            echo "Nothing changed — no commit needed."
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add games.json
-          git commit -m "Refresh pinball lineup"
+          git add games.json instagram.json assets/ig
+          git commit -m "Refresh site content"
           git push
 
       - uses: actions/configure-pages@v5

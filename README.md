@@ -208,3 +208,23 @@ Tiles render at `aspect-ratio:1` with `object-fit:cover`, meaning the browser
 centre-crops anything that isn't square. The flyer was cropped from the top by
 hand so the logo and date survived; a centre crop had cut the logo in half. Worth
 remembering for any text-heavy image.
+
+## Phone links open a chooser
+
+Every `tel:` link on the page opens a small dialog offering **Call** or **Text**
+instead of dialling straight away, because plenty of people would rather text.
+There are three of them: the Contact row in Visit, the "Still stuck?" button in
+the FAQ, and the footer.
+
+It's progressive enhancement, same shape as the directions links. The `href` in
+the HTML is a real `tel:` link, so with JavaScript off, or in a browser without
+`<dialog>`, tapping the number just dials as it always did. The script only
+intercepts the click when it can actually show the chooser.
+
+**To change the number**, search `18044202188` — it appears in the three page
+links, twice inside the dialog (`tel:` and `sms:`), in the visible dialog text,
+and in the `telephone` field of the JSON-LD. Update all of them.
+
+> `sms:` is reliable on iOS and Android. On desktop it depends on whether the OS
+> has a handler registered, so a Windows visitor may find "Text" does nothing.
+> The number is shown as plain text in the dialog so it can always be copied.

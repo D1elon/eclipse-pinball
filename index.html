@@ -763,6 +763,45 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
   font-size:.95rem;color:var(--faint);display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;
 }
 
+/* ============================================================
+   CALL-OR-TEXT CHOOSER
+   Every tel: link opens this instead of dialling straight away, so a
+   visitor on a phone can pick. Native <dialog> gives us the focus trap,
+   Esc-to-close and backdrop for free. If <dialog> is unsupported the
+   script bails out and the tel: links behave exactly as before.
+   ============================================================ */
+.ct-dialog{
+  border:1px solid rgba(34,224,255,.34);border-radius:var(--r);
+  background:linear-gradient(180deg,#0d0b1c,#080714);
+  color:var(--text);padding:2rem 1.9rem 1.9rem;
+  width:min(24rem,calc(100vw - 2.5rem));
+  box-shadow:0 30px 90px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.04) inset;
+}
+.ct-dialog::backdrop{background:rgba(3,2,9,.78);backdrop-filter:blur(3px)}
+.ct-dialog[open]{animation:ctIn .22s ease}
+@keyframes ctIn{from{opacity:0;transform:translateY(10px) scale(.98)}}
+@media(prefers-reduced-motion:reduce){.ct-dialog[open]{animation:none}}
+
+.ct-close-form{margin:0;position:absolute;top:.55rem;right:.6rem}
+.ct-close{
+  appearance:none;border:0;background:transparent;cursor:pointer;
+  color:var(--faint);font-size:1.5rem;line-height:1;
+  padding:.35rem .55rem;border-radius:8px;
+}
+.ct-close:hover{color:#fff;background:rgba(255,255,255,.07)}
+
+.ct-eyebrow{
+  margin:0 0 .3rem;font-family:var(--mono);font-size:.78rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);
+}
+.ct-num{
+  margin:0;font-family:var(--display);font-weight:800;
+  font-size:1.6rem;letter-spacing:.01em;color:#fff;
+}
+.ct-sub{margin:.5rem 0 1.5rem;color:var(--dim);font-size:1rem}
+.ct-actions{display:grid;gap:.7rem}
+.ct-actions .btn{width:100%;justify-content:center}
+
 /* ---------- reveal ---------- */
 .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
@@ -881,7 +920,7 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
     <p class="attrib rv">
       Machine data from <a href="https://pinballmap.com/map/?by_location_id=15825" target="_blank" rel="noopener">Pinball Map</a>,
       an open community project. Last synced <span id="synced">Aug 3, 2026</span>.
-      Lineups change, so call ahead if you're driving in for one specific game.
+      Lineups change, so call or text ahead if you're driving in for one specific game.
     </p>
   </div>
 </section>
@@ -1024,7 +1063,8 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
           <div>
             <dt>Contact</dt>
             <dd><a href="tel:+18044202188">804-420-2188</a>
-              <span class="muted"><a href="mailto:contact@eclipsepinball.com">contact@eclipsepinball.com</a></span></dd>
+              <span class="muted">Call or text, either works.<br>
+                <a href="mailto:contact@eclipsepinball.com">contact@eclipsepinball.com</a></span></dd>
           </div>
         </dl>
         <p style="margin-top:2rem">
@@ -1057,7 +1097,7 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
     <p class="eyebrow rv">Good to know</p>
     <h2 class="sec rv">Common <em>Questions</em></h2>
     <p class="lede rv">The things people ask us most. Anything not covered here,
-      just call or email. We'd rather answer it than have you guess.</p>
+      just call, text, or email. We'd rather answer it than have you guess.</p>
 
     <div class="faq-list rv">
 
@@ -1129,12 +1169,32 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
     <div class="faq-more rv">
       <p>Still stuck?</p>
       <span class="faq-more-btns">
-        <a class="btn" href="tel:+18044202188">Call 804-420-2188</a>
+        <a class="btn" href="tel:+18044202188">Call or Text</a>
         <a class="btn alt" href="mailto:contact@eclipsepinball.com">Email Us</a>
       </span>
     </div>
   </div>
 </section>
+
+<!-- Opened by every tel: link on the page. See the phoneChooser script. -->
+<dialog class="ct-dialog" id="phoneDialog" aria-labelledby="ctNum">
+  <form method="dialog" class="ct-close-form">
+    <button class="ct-close" aria-label="Close">&#215;</button>
+  </form>
+  <p class="ct-eyebrow">Eclipse Pinball</p>
+  <p class="ct-num" id="ctNum">804-420-2188</p>
+  <p class="ct-sub">Call or text, whichever you prefer.</p>
+  <div class="ct-actions">
+    <a class="btn" href="tel:+18044202188" autofocus>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>
+      Call
+    </a>
+    <a class="btn alt" href="sms:+18044202188">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM7 9h10v2H7V9zm0 4h7v2H7v-2z"/></svg>
+      Text
+    </a>
+  </div>
+</dialog>
 
 <footer class="site">
   <div class="wrap">
@@ -1389,6 +1449,30 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
         }
       })
       .catch(function(){ /* follow panel is already the default — nothing to do */ });
+  })();
+
+  /* ---------- call or text ----------
+     Every tel: link opens a chooser rather than dialling immediately, because
+     plenty of people would rather send a text than talk to someone.
+     Progressive enhancement: the href stays a real tel: link, so with JS off,
+     or in a browser without <dialog>, tapping the number still dials. */
+  (function phoneChooser(){
+    var dlg = document.getElementById('phoneDialog');
+    if (!dlg || typeof dlg.showModal !== 'function') return;
+
+    [].forEach.call(document.querySelectorAll('a[href^="tel:"]'), function(a){
+      if (a.closest('.ct-dialog')) return;   /* the buttons inside the dialog must still dial */
+      a.setAttribute('aria-haspopup', 'dialog');
+      a.addEventListener('click', function(e){
+        /* leave modified clicks alone so "open in new tab" etc. still behave */
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+        e.preventDefault();
+        dlg.showModal();
+      });
+    });
+
+    /* clicking the backdrop closes it; Esc is handled by <dialog> itself */
+    dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
   })();
 
   /* ---------- directions open in the phone's own maps app ----------
