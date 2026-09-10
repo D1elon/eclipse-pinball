@@ -1,10 +1,12 @@
 # Eclipse Pinball — website
 
-Single-page marketing site for Eclipse Pinball, 1310 Altamont Ave, Richmond VA.
+Marketing site for Eclipse Pinball, 1310 Altamont Ave, Richmond VA.
 Dark 80s-arcade theme. No build step, no dependencies, no framework.
 
 ```
 index.html               content + JavaScript, with the original embedded logos
+privacy.html             website privacy notice
+accessibility.html       accessibility statement and contact options
 assets/site.css          site styles
 tools/sync-games.mjs     keeps the fallback, counts, and checked date current
 tools/validate-site.mjs  checks data, scripts, links, and local assets
@@ -34,6 +36,18 @@ and the workflow publishes it.
 > Open `index.html` from the filesystem (`file://`) and the browser blocks the
 > `games.json` fetch. The page falls back to its built-in snapshot, so it still
 > renders the saved lineup — but serve it over HTTP to exercise the real path.
+
+## Website notices
+
+The footer links to Privacy and Accessibility pages, which use the shared site
+styles and work without JavaScript. Both are included in the Pages deployment.
+The privacy notice covers the verified website features, GitHub Pages logs,
+Google Maps, external links, and inquiries. It does not make business-wide
+no-sale/no-sharing or fixed retention claims. The accessibility statement is
+clear that a comprehensive audit has not been completed. Keep these notices
+current when adding forms, tracking, bookings, providers, or accessibility changes.
+Business-specific privacy obligations and record handling should be reviewed by
+the owner and appropriate counsel before production publication.
 
 ## The games list — read this part
 

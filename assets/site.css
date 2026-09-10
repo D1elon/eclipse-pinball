@@ -736,6 +736,26 @@ footer .wm{height:26px;width:auto;color:var(--dim);margin-bottom:1rem}
 /* Small refinements around the original design. */
 .skip-link{position:fixed;top:.5rem;left:1rem;z-index:1000;padding:.6rem 1rem;background:var(--cyan);color:var(--void);transform:translateY(-200%)}
 .skip-link:focus{transform:none}
+.policy-links{display:flex;flex-wrap:wrap;gap:.5rem 1.2rem}
+.policy-links a{text-decoration:underline;text-underline-offset:.2em}
+.policy-links a[aria-current="page"]{color:var(--text)}
+header.policy-header{border-bottom-color:var(--line)}
+.policy-brand{margin-right:auto;flex-shrink:0}
+.policy-brand img{width:clamp(110px,20vw,150px);height:auto}
+.policy-back{font-size:1rem;text-align:right;text-decoration:underline;text-underline-offset:.2em}
+.policy-document{max-width:780px;padding-block:clamp(2.5rem,6vw,4.5rem);font-size:1.12rem;line-height:1.65}
+.policy-document h1{font:900 clamp(1.55rem,4.5vw,2.8rem)/1.2 var(--display);letter-spacing:.01em;margin:0 0 .8rem;color:var(--text);overflow-wrap:anywhere}
+.policy-date{font:400 .82rem/1.5 var(--mono);color:var(--dim);margin:0 0 1.8rem}
+.policy-intro{font-size:1.15em;line-height:1.55;margin:0 0 2rem}
+.policy-section{padding:0;margin:2rem 0 0;scroll-margin-top:90px}
+.policy-section h2{font:700 1.12rem/1.45 var(--display);color:var(--cyan);margin:0 0 .8rem}
+.policy-section p{margin:.7rem 0;color:var(--text)}
+.policy-section a{text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
+.policy-section ul{padding-left:1.35rem;margin:.8rem 0}.policy-section li{margin:.5rem 0}
+.policy-contact{border-left:2px solid var(--cyan);padding-left:1.2rem}
+.policy-contact address{font-style:normal;line-height:1.8;margin:1rem 0;overflow-wrap:anywhere}
+.policy-footer .legal{margin-top:0}
+@media(max-width:420px){.policy-header .nav-in{gap:.8rem}.policy-back{max-width:8rem}.policy-document{font-size:1.05rem}.policy-section h2{font-size:1rem}.policy-contact{padding-left:.85rem}}
 .results-count{margin:1rem 0 0;color:var(--dim);font:400 .82rem/1.5 var(--mono)}
 .game{min-width:0}
 .game h3{overflow-wrap:anywhere}
