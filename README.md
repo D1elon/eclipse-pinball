@@ -6,7 +6,6 @@ Dark 80s-arcade theme. No build step, no dependencies, no framework.
 ```
 index.html               content + JavaScript, with the original embedded logos
 assets/site.css          site styles
-assets/fonts/            locally hosted fonts and their licenses
 tools/sync-games.mjs     keeps the fallback, counts, and checked date current
 tools/validate-site.mjs  checks data, scripts, links, and local assets
 games.json               the machine lineup the page renders
@@ -164,20 +163,18 @@ that behaviour.
 
 ## Design notes
 
-- **Type** — Barlow Condensed for headings; Source Sans 3 for body text and
-  controls. Fonts and SIL Open Font Licenses are in `assets/fonts/`.
-- **Controls** — rectangular buttons, underlined era filters, and clear focus
-  rings. Game names and editions sit in a quieter, more readable list.
-- **Type scale** — the 18px default respects the visitor's browser font setting.
-- **Identity** — the original wordmark, badge, glowing eclipse, moving grid and
-  cyan/pink arcade colors remain. Scanlines are subtle and limited to the hero.
-  Logo flicker and scroll reveals are removed; reduced-motion preferences stop
-  the grid and eclipse animation.
-- **Accessibility** — filters use `aria-pressed`; a compact result count uses
-  `aria-live`; the mobile menu supports Escape and `aria-expanded`. Native FAQ
-  disclosures and the call/text dialog are retained, with reduced-motion support.
-- **Map** — the existing Google Maps embed stays in its original map colors.
-  Font assets are local; the map still makes requests to Google.
+- **Design** — restored from the original site: Orbitron headings, Rajdhani body
+  text, Share Tech Mono labels, rounded neon buttons, glowing game cards, gradient
+  headings, the animated eclipse and grid, and CRT atmosphere.
+- **Fonts** — the original font data is embedded in `assets/site.css`, with no
+  third-party font requests.
+- **Polish** — more comfortable button spacing, better narrow-screen fitting,
+  usable short-landscape menus, clear keyboard focus, and a steady logo glow.
+- **Accessibility** — era filters use `aria-pressed`; results use `aria-live`;
+  the mobile menu supports Escape and `aria-expanded`. Native FAQ disclosures
+  and the call/text dialog remain. Content is visible if scroll reveals cannot
+  run, and reduced-motion preferences stop animation.
+- **Map** — preserves the original darkened Google Maps embed.
 - **Directions links** carry `data-directions`. The HTML href is a plain Google Maps
   directions URL so it works with JS off and on desktop; a small script swaps it for
   `maps://` on iOS and `geo:` on Android so phones hand off to whatever maps app the
