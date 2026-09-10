@@ -138,13 +138,17 @@ the block — and add the matching entry to the JSON-LD.
 ## Updating the featured event
 
 The Events section shows one featured tournament, currently **Mistress of the
-Mooncade** (Fri Aug 14, 2026 — sign-up 6pm, start 7pm, $15).
+Mooncade** (Fri Sep 11, 2026 — sign-up 6pm, games at 7pm, $15).
+The supplied September flyer welcomes femmes and thems and lists the venue as
+Eclipse Pinball, 1310 Altamont Avenue.
 
 To swap in the next one, edit the `<article class="ev-featured">` block in
-`index.html` and change its `data-ends` attribute to the new event's end time:
+`index.html` and change its `data-ends` attribute to the display cutoff. When a
+flyer gives no end time, use midnight after the event date; this does not advertise
+an event end time:
 
 ```html
-<article class="ev-featured rv" data-ends="2026-09-11T23:00:00-04:00">
+<article class="ev-featured rv" data-ends="2026-09-12T00:00:00-04:00">
 ```
 
 Once `data-ends` is in the past the card automatically dims and gets a
