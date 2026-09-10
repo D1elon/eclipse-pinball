@@ -1,7 +1,13 @@
 # Deploying to GitHub Pages + eclipsepinball.com
 
-Everything in this folder is already a working repo. Push it, flip two settings,
-change four DNS records, done.
+The site is already hosted on GitHub Pages. For this update, merge the reviewed
+changes into `main`; the existing **Deploy site** workflow publishes them. Keep
+the current custom domain and DNS settings.
+
+The setup instructions below describe the original deployment and are historical,
+not a request to change DNS again. Current manual lineup steps are in `README.md`.
+The workflow now checks the roster and fallback, then uploads only public site
+files rather than the entire repository.
 
 ---
 
@@ -132,9 +138,9 @@ under **Settings → Secrets and variables → Actions → New repository secret
 exactly `PINBALL_MAP_TOKEN`.
 
 Until you do, the workflow logs a notice and deploys the committed `games.json` — so
-the site works fine today with all 50 machines. Nothing is blocked on the token.
+the site works fine today with the saved 53-machine snapshot (checked September 10, 2026). Nothing is blocked on the token.
 
-It runs on every push, daily at 09:00 UTC (5am ET), and on demand from the Actions tab.
+It runs on every push, daily at 09:00 UTC (5am EDT / 4am EST), and on demand from the Actions tab.
 
 **Design notes, in case you wonder why it's shaped this way:**
 

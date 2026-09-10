@@ -8,7 +8,7 @@
   "zip": "23230",
   "phone": "804-420-2188"
  },
- "updated": "2026-08-03",
+ "updated": "2026-09-10",
  "source": "https://pinballmap.com/map/?by_location_id=15825",
  "machines": [
   {
@@ -126,6 +126,12 @@
    "year": 2021
   },
   {
+   "name": "Harry Potter",
+   "edition": "Wizard Edition",
+   "manufacturer": "Jersey Jack",
+   "year": 2025
+  },
+  {
    "name": "Haunted House",
    "edition": null,
    "manufacturer": "Gottlieb",
@@ -184,6 +190,12 @@
    "edition": null,
    "manufacturer": "Stern",
    "year": 2005
+  },
+  {
+   "name": "Night Moves",
+   "edition": null,
+   "manufacturer": "Gottlieb",
+   "year": 1989
   },
   {
    "name": "Phantom of the Opera",
@@ -288,6 +300,12 @@
    "year": 2025
   },
   {
+   "name": "Theatre of Magic",
+   "edition": null,
+   "manufacturer": "Bally",
+   "year": 1995
+  },
+  {
    "name": "Total Nuclear Annihilation",
    "edition": "CE",
    "manufacturer": "Spooky",
@@ -311,5 +329,7 @@
    "manufacturer": "Data East",
    "year": 1994
   }
- ]
+ ],
+ "sourceUpdated": "2026-09-06",
+ "updateMethod": "manual"
 }

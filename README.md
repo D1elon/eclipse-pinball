@@ -4,7 +4,11 @@ Single-page marketing site for Eclipse Pinball, 1310 Altamont Ave, Richmond VA.
 Dark 80s-arcade theme. No build step, no dependencies, no framework.
 
 ```
-index.html               the entire site (CSS + JS inlined, logos inlined as SVG/data-URI)
+index.html               content + JavaScript, with the original embedded logos
+assets/site.css          site styles
+assets/fonts/            locally hosted fonts and their licenses
+tools/sync-games.mjs     keeps the fallback, counts, and checked date current
+tools/validate-site.mjs  checks data, scripts, links, and local assets
 games.json               the machine lineup the page renders
 tools/refresh-games.mjs  pulls a fresh lineup from the Pinball Map API
 tools/refresh-instagram.mjs  pulls recent IG posts and downloads the images
@@ -30,54 +34,59 @@ and the workflow publishes it.
 
 > Open `index.html` from the filesystem (`file://`) and the browser blocks the
 > `games.json` fetch. The page falls back to its built-in snapshot, so it still
-> renders all 50 machines — but serve it over HTTP to exercise the real path.
+> renders the saved lineup — but serve it over HTTP to exercise the real path.
 
 ## The games list — read this part
 
-The site was asked to pull a live list from the Pinball Map API. Two things
-make a direct browser call impossible:
+The lineup is manually maintained until the requested API key is approved.
+The September 10, 2026 check found 53 games on
+[Eclipse's Pinball Map listing](https://pinballmap.com/map/?by_location_id=15825),
+whose last location update was September 6. Additions since the previous snapshot:
+Harry Potter (Wizard Edition), Night Moves, and Theatre of Magic. No removals.
 
-1. **Every endpoint now requires an API token.** Unauthenticated requests return
-   `401 {"error":"A valid api_token is required for this endpoint."}`
-2. **The API sends no CORS headers.** Even with a token, a `fetch()` from
-   `eclipsepinball.com` is blocked by the browser before it leaves the page.
+### Manual updates
 
-So the data is fetched *server-side* and served same-origin:
+1. Compare the complete lineup with the linked Pinball Map location.
+2. Edit `games.json`: add/remove machines and set `updated` to the date you checked.
+   Keep `updateMethod` as `manual`; set `sourceUpdated` to the listing's update date
+   if shown, or remove it if unknown.
+3. Run `node tools/sync-games.mjs`, then `node tools/validate-site.mjs`.
+4. Commit `games.json` and `index.html`. The Pages workflow runs both steps too,
+   so edits made directly on GitHub get the same treatment before publishing.
+
+The page shows a checked date rather than promising live availability. It also
+embeds the saved roster so a failed JSON request cannot leave an empty games list.
+
+### When the API key arrives
+
+Keep the approved token server-side in GitHub Actions secrets. The existing
+workflow refreshes the roster daily at 09:00 UTC, on pushes to `main`, and on
+demand. Without `PINBALL_MAP_TOKEN`, it deploys the committed manual list.
 
 ```
-Pinball Map API  →  tools/refresh-games.mjs  →  games.json  →  index.html
+Pinball Map API → tools/refresh-games.mjs → games.json → tools/sync-games.mjs → index.html
 ```
 
-`index.html` also embeds a snapshot of the lineup, so if `games.json` is ever
-missing or malformed the page still renders a full list rather than an empty grid.
+Add the approved key under **Settings → Secrets and variables → Actions** as
+`PINBALL_MAP_TOKEN`. Run **Actions → Deploy site → Run workflow** and verify the
+resulting roster and checked date. No hosting change is required.
 
-### Refreshing the lineup
+The existing API refresher is retained for that activation. It includes the
+documented `api_token` parameter as an authentication option. The authenticated
+request has not been tested with a real key. It refuses an empty response and
+keeps the prior file on fetch failure. Publishing also synchronizes the fallback
+and validates local assets. Source: [Pinball Map API docs](https://pinballmap.com/api/v1/docs).
 
-1. Request a token at <https://pinballmap.com/api_token>
-2. Run it:
+To refresh locally after approval:
 
 ```sh
 export PINBALL_MAP_TOKEN="your-token-here"
 node tools/refresh-games.mjs
+node tools/sync-games.mjs
+node tools/validate-site.mjs
 ```
 
-The script tries all four plausible auth styles (`Authorization`, `X-Api-Token`,
-`Bearer`, `?api_token=`) and reports which one worked — Pinball Map doesn't
-document this. If every style fails, it exits non-zero and **leaves `games.json`
-untouched**, so a bad run can never blank out the lineup.
-
-### Automating it
-
-Already wired up. `.github/workflows/deploy.yml` refreshes the lineup and deploys the
-site on every push, daily at 09:00 UTC, and on demand from the Actions tab.
-
-To switch the refresh on, add your token as a repository secret named
-`PINBALL_MAP_TOKEN` (**Settings → Secrets and variables → Actions**). Until then the
-workflow logs a notice and deploys the committed `games.json`, so the site is never
-blocked on it. See `DEPLOY.md` for the full setup.
-
-**Do not put the token in `index.html`.** It would be public, and it wouldn't
-work anyway because of the CORS block.
+**Never place the key in browser code or commit it to the repository.**
 
 ### Attribution
 
@@ -103,7 +112,7 @@ Confirmed by the client or pulled from the Pinball Map listing — not invented:
 - **Sun & Mon 11:00 AM – 7:00 PM; Tue–Sat 11:00 AM – 8:00 PM**
 - $15 entry, all games on free play
 - All ages
-- 50 machines as of Aug 3, 2026
+- 53 machines checked against Pinball Map on Sep 10, 2026
 - Anti-reflective glass on every game (confirmed Aug 4, 2026)
 - Instagram: [@eclipsepinball](https://www.instagram.com/eclipsepinball/)
 - Email: contact@eclipsepinball.com
@@ -155,26 +164,20 @@ that behaviour.
 
 ## Design notes
 
-- **Type** — Orbitron (display), Rajdhani (body), Share Tech Mono (labels). All three
-  are base64-embedded in `index.html`, so the page makes **zero third-party requests** —
-  no Google Fonts call, no tracking, no flash of unstyled text, works offline.
-- **Type scale** — `html` is set to `112.5%` (18px) and everything below is in `rem`,
-  so the whole page scales with a visitor's browser font-size preference.
-- **Logos** — the wordmark was vector-traced from the supplied PNG to a ~6KB inline
-  SVG that uses `currentColor`, so it stays crisp at any size and recolors with CSS.
-  The circular badge is only 150×150, so it's used at favicon/nav scale only. If a
-  higher-res badge exists, swap the data-URI in `<link rel="icon">` and the nav `<img>`.
-- **Motion** — the grid floor, corona, and logo flicker all stop under
-  `prefers-reduced-motion: reduce`.
-- **Accessibility** — the era filter uses `aria-pressed`, the grid is `aria-live`,
-  the mobile menu manages `aria-expanded`, and focus rings are visible throughout.
-- **The map** is a Google Maps embed using the keyless `?output=embed` form — no
-  API key, no billing account, no GCP project. A CSS `invert`/`hue-rotate` filter
-  on the iframe darkens it to match the theme. Querying by business name (not just
-  the address) makes the pin read "Eclipse Pinball".
-  *Trade-off:* this is now the site's only third-party request. Google sets cookies
-  and sees visitors' IPs. If that ever matters, the OpenStreetMap embed it replaced
-  is in git history and needs no key either.
+- **Type** — Barlow Condensed for headings; Source Sans 3 for body text and
+  controls. Fonts and SIL Open Font Licenses are in `assets/fonts/`.
+- **Controls** — rectangular buttons, underlined era filters, and clear focus
+  rings. Game names and editions sit in a quieter, more readable list.
+- **Type scale** — the 18px default respects the visitor's browser font setting.
+- **Identity** — the original wordmark, badge, glowing eclipse, moving grid and
+  cyan/pink arcade colors remain. Scanlines are subtle and limited to the hero.
+  Logo flicker and scroll reveals are removed; reduced-motion preferences stop
+  the grid and eclipse animation.
+- **Accessibility** — filters use `aria-pressed`; a compact result count uses
+  `aria-live`; the mobile menu supports Escape and `aria-expanded`. Native FAQ
+  disclosures and the call/text dialog are retained, with reduced-motion support.
+- **Map** — the existing Google Maps embed stays in its original map colors.
+  Font assets are local; the map still makes requests to Google.
 - **Directions links** carry `data-directions`. The HTML href is a plain Google Maps
   directions URL so it works with JS off and on desktop; a small script swaps it for
   `maps://` on iOS and `geo:` on Android so phones hand off to whatever maps app the

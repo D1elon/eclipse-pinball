@@ -56,24 +56,35 @@ jobs:
           fi
           node tools/refresh-games.mjs
 
+      - name: Update fallback and validate site
+        run: |
+          node tools/sync-games.mjs
+          node tools/validate-site.mjs
+
       - name: Commit the lineup if it changed
         run: |
-          if git diff --quiet -- games.json; then
+          if git diff --quiet -- games.json index.html; then
             echo "Lineup unchanged — nothing to commit."
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add games.json
+          git add games.json index.html
           git commit -m "Refresh pinball lineup"
           git push
 
       - uses: actions/configure-pages@v5
 
+      - name: Collect public site files
+        run: |
+          mkdir -p _site
+          cp index.html games.json instagram.json og-image.jpg CNAME _site/
+          cp -R assets _site/assets
+
       - name: Upload the site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "_site"
 
       - name: Deploy to GitHub Pages
         id: deployment
