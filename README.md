@@ -1,248 +1,103 @@
-# Eclipse Pinball — website
+# Eclipse Pinball
 
-Marketing site for Eclipse Pinball, 1310 Altamont Ave, Richmond VA.
-Dark 80s-arcade theme. No build step, no dependencies, no framework.
+A website for Eclipse Pinball in Richmond, Virginia. Built with plain HTML, CSS, and JavaScript, with an arcade-inspired design and practical details for planning a visit.
 
-```
-index.html               content + JavaScript, with the original embedded logos
-privacy.html             website privacy notice
-accessibility.html       accessibility statement and contact options
-assets/site.css          site styles
-tools/sync-games.mjs     keeps the fallback, counts, and checked date current
-tools/validate-site.mjs  checks data, scripts, links, and local assets
-games.json               the machine lineup the page renders
-tools/refresh-games.mjs  pulls a fresh lineup from the Pinball Map API
-tools/refresh-instagram.mjs  pulls recent IG posts and downloads the images
-instagram.json           the posts the page renders (hand-picked today)
-assets/ig/               local copies of the post images
-og-image.jpg             1200x630 social-share preview
-.github/workflows/       refresh + deploy to GitHub Pages
-CNAME                    the custom domain (www.eclipsepinball.com)
-DEPLOY.md                how to put this live on eclipsepinball.com
-```
+[Visit the site](https://www.eclipsepinball.com/)
 
-## Running it
+## What it does
 
-It's a static file. Any of these work:
+- Shows the machine lineup with era filters and a visible checked date.
+- Keeps a saved lineup in the page so the list still works if the JSON request fails.
+- Presents hours, admission, events, FAQs, directions, and contact options.
+- Offers call and text choices on supported devices, with regular phone links as a fallback.
+- Uses keyboard-friendly navigation, visible focus styles, and reduced-motion support.
+- Publishes through GitHub Pages after checking the data, links, scripts, and local assets.
+
+The visual design uses neon color, arcade typography, an animated eclipse, and a subtle CRT treatment. Fonts and Instagram images are served locally.
+
+## Stack
+
+HTML, CSS, JavaScript, Node.js maintenance scripts, and GitHub Actions. The website has no build step. The maintenance scripts use Node.js built-ins, so there are no packages to install. The deployment workflow uses Node.js 20.
+
+## Run locally
+
+From the repository root:
 
 ```sh
-python3 -m http.server 8000     # then open http://localhost:8000
-npx serve .
+python3 -m http.server 8000
 ```
 
-Hosting is **GitHub Pages** — see `DEPLOY.md`. Nothing to compile; push to `main`
-and the workflow publishes it.
+Open [localhost:8000](http://localhost:8000).
 
-> Open `index.html` from the filesystem (`file://`) and the browser blocks the
-> `games.json` fetch. The page falls back to its built-in snapshot, so it still
-> renders the saved lineup — but serve it over HTTP to exercise the real path.
+Use a local HTTP server when checking the data-driven sections. Opening `index.html` directly uses the saved game lineup because browsers restrict local file requests.
 
-## Website notices
+## Project structure
 
-The footer links to Privacy and Accessibility pages, which use the shared site
-styles and work without JavaScript. Both are included in the Pages deployment.
-The privacy notice covers the verified website features, GitHub Pages logs,
-Google Maps, external links, and inquiries. It does not make business-wide
-no-sale/no-sharing or fixed retention claims. The accessibility statement is
-clear that a comprehensive audit has not been completed. Keep these notices
-current when adding forms, tracking, bookings, providers, or accessibility changes.
-Business-specific privacy obligations and record handling should be reviewed by
-the owner and appropriate counsel before production publication.
-
-## The games list — read this part
-
-The lineup is manually maintained until the requested API key is approved.
-The September 10, 2026 check found 53 games on
-[Eclipse's Pinball Map listing](https://pinballmap.com/map/?by_location_id=15825),
-whose last location update was September 6. Additions since the previous snapshot:
-Harry Potter (Wizard Edition), Night Moves, and Theatre of Magic. No removals.
-
-### Manual updates
-
-1. Compare the complete lineup with the linked Pinball Map location.
-2. Edit `games.json`: add/remove machines and set `updated` to the date you checked.
-   Keep `updateMethod` as `manual`; set `sourceUpdated` to the listing's update date
-   if shown, or remove it if unknown.
-3. Run `node tools/sync-games.mjs`, then `node tools/validate-site.mjs`.
-4. Commit `games.json` and `index.html`. The Pages workflow runs both steps too,
-   so edits made directly on GitHub get the same treatment before publishing.
-
-The page shows a checked date rather than promising live availability. It also
-embeds the saved roster so a failed JSON request cannot leave an empty games list.
-
-### When the API key arrives
-
-Keep the approved token server-side in GitHub Actions secrets. The existing
-workflow refreshes the roster daily at 09:00 UTC, on pushes to `main`, and on
-demand. Without `PINBALL_MAP_TOKEN`, it deploys the committed manual list.
-
-```
-Pinball Map API → tools/refresh-games.mjs → games.json → tools/sync-games.mjs → index.html
+```text
+index.html                  Main page and interactions
+assets/site.css             Styles and local font data
+games.json                  Machine lineup and source dates
+instagram.json              Selected Instagram posts
+assets/ig/                  Local post images
+privacy.html                Website privacy notice
+accessibility.html          Accessibility statement
+tools/sync-games.mjs         Updates the saved lineup and counts
+tools/validate-site.mjs      Checks data, scripts, links, and assets
+tools/refresh-games.mjs      Optional Pinball Map API refresh
+tools/refresh-instagram.mjs  Optional Instagram refresh utility
+.github/workflows/deploy.yml Validation and Pages deployment
+CNAME                       Custom domain
 ```
 
-Add the approved key under **Settings → Secrets and variables → Actions** as
-`PINBALL_MAP_TOKEN`. Run **Actions → Deploy site → Run workflow** and verify the
-resulting roster and checked date. No hosting change is required.
+## Updating content
 
-The existing API refresher is retained for that activation. It includes the
-documented `api_token` parameter as an authentication option. The authenticated
-request has not been tested with a real key. It refuses an empty response and
-keeps the prior file on fetch failure. Publishing also synchronizes the fallback
-and validates local assets. Source: [Pinball Map API docs](https://pinballmap.com/api/v1/docs).
+### Machine lineup
 
-To refresh locally after approval:
+The repository includes a manually maintained snapshot from [Pinball Map](https://pinballmap.com/map/?by_location_id=15825). The checked date describes when the list was reviewed; it does not promise that every machine is available at that moment.
 
-```sh
-export PINBALL_MAP_TOKEN="your-token-here"
-node tools/refresh-games.mjs
-node tools/sync-games.mjs
-node tools/validate-site.mjs
-```
+1. Compare the full lineup with the source listing.
+2. Update `games.json`, including its checked date and source metadata.
+3. Run:
 
-**Never place the key in browser code or commit it to the repository.**
+   ```sh
+   node tools/sync-games.mjs
+   node tools/validate-site.mjs
+   ```
 
-### Attribution
+4. Review and commit both `games.json` and `index.html`.
 
-Pinball Map asks that you credit them when you use their data. The credit is in
-two places in `index.html` — under the games grid and in the footer. Please
-leave it in.
+Keep the Pinball Map credit in the page and footer.
 
-## Before launch — placeholders to replace
+### Instagram
 
-Every one is marked with `TODO(client)` in `index.html`. Search for that string.
+The current site uses selected posts from `instagram.json` and local images in `assets/ig/`. Edit the matching image, alt text, caption, and permalink when replacing a post. Square images work best; check crops carefully when an image contains text.
 
-| What | Where | Status |
-|---|---|---|
-| Facebook URL | footer `.social` | **Placeholder**, points at the bare domain |
-| Instagram post links | `instagram.json` | **Placeholder**, all three link to the profile |
+The repository also includes an API refresh utility. It is not part of the active deployment workflow.
 
-### What's already verified
+### Events and FAQs
 
-Confirmed by the client or pulled from the Pinball Map listing — not invented:
+Featured events live in `index.html`. The event card's `data-ends` value controls when it receives a past-event label. Keep displayed dates and the cutoff consistent.
 
-- 1310 Altamont Ave, Richmond, VA 23230 (Scott's Addition)
-- 804-420-2188
-- **Sun & Mon 11:00 AM – 7:00 PM; Tue–Sat 11:00 AM – 8:00 PM**
-- $15 entry, all games on free play
-- All ages
-- 53 machines checked against Pinball Map on Sep 10, 2026
-- Anti-reflective glass on every game (confirmed Aug 4, 2026)
-- Instagram: [@eclipsepinball](https://www.instagram.com/eclipsepinball/)
-- Email: contact@eclipsepinball.com
-- Formerly Wax Moon; reopened July 4 as Eclipse Pinball
+FAQ answers appear both in the visible page and in its `FAQPage` structured data. Update both when changing an answer. Publish only confirmed venue information.
 
-## The FAQ
+## Deployment
 
-Seven questions in a native `<details>` accordion in the `#faq` section — no JS,
-keyboard-accessible for free, and it works with scripts disabled.
+The `Deploy site` workflow runs on pushes to `main`, daily at 09:00 UTC, and on demand. It optionally refreshes the game list, synchronizes the saved fallback, validates the site, and deploys an explicit set of public files to GitHub Pages.
 
-**The answers came from Alex and Andrew's thread**, not from guesswork. Editing one
-means editing it in **two places**: the visible `<details>` block *and* the
-`FAQPage` JSON-LD in the `<head>`. Google requires the structured data to match the
-visible copy — a mismatch can cost the rich result. Search `"@type": "FAQPage"`.
+If `PINBALL_MAP_TOKEN` is unavailable, the workflow keeps the committed lineup. An API failure also leaves the saved list in place.
 
-### One question is parked
+Keep the existing custom domain and Pages configuration when making content changes. `DEPLOY.md` contains the original setup notes; its DNS instructions describe the initial migration.
 
-**"Can I bring in my own food or drinks?"** is written and sitting commented out
-just below the private-event question. Andrew said he'd rather not raise it on the
-site; Alex noted it comes up repeatedly and Andrew thumbs-up'd both of his replies,
-so it was never actually settled. To publish it, delete the `<!--` and `-->` around
-the block — and add the matching entry to the JSON-LD.
+## Credentials and maintenance
 
-## Updating the featured event
+API credentials belong in GitHub Actions secrets or a local environment. Never add them to browser code or commit them. The optional Instagram utility can create a local `.ig-token-new` file; treat it as a credential and keep it outside version control.
 
-The Events section shows one featured tournament, currently **Mistress of the
-Mooncade** (Fri Sep 11, 2026 — sign-up 6pm, games at 7pm, $15).
-The supplied September flyer welcomes femmes and thems and lists the venue as
-Eclipse Pinball, 1310 Altamont Avenue.
+Review privacy and accessibility notices whenever the site's features or third-party services change. The accessibility statement describes the work completed so far and does not claim a comprehensive audit.
 
-To swap in the next one, edit the `<article class="ev-featured">` block in
-`index.html` and change its `data-ends` attribute to the display cutoff. When a
-flyer gives no end time, use midnight after the event date; this does not advertise
-an event end time:
+## Known limitations
 
-```html
-<article class="ev-featured rv" data-ends="2026-09-12T00:00:00-04:00">
-```
+- The Facebook link still needs a verified venue URL.
+- The selected Instagram tiles currently link to the profile rather than individual posts.
+- The authenticated Pinball Map refresh is included but is not documented as tested with a live token.
 
-Once `data-ends` is in the past the card automatically dims and gets a
-"Past event" tag, so a site nobody has touched in a month never advertises a
-tournament that already happened. Removing the `data-ends` attribute disables
-that behaviour.
-
-> **Worth confirming (1):** Google Business Profile lists Eclipse as closing at
-> **7:00 PM**. That now matches the site on Sun/Mon but not Tue–Sat. Google should
-> be updated to the split schedule — it's what most people check before driving over.
->
-> **Worth confirming (2):** the tournament starts at 7:00 PM but the posted closing
-> time is 8:00 PM. Presumably the room stays open past close on tournament
-> nights — the Hours block says "Tournament nights run later — see Events" to
-> cover it, but you may want a firmer line from the client.
-
-## Design notes
-
-- **Design** — restored from the original site: Orbitron headings, Rajdhani body
-  text, Share Tech Mono labels, rounded neon buttons, glowing game cards, gradient
-  headings, the animated eclipse and grid, and CRT atmosphere.
-- **Fonts** — the original font data is embedded in `assets/site.css`, with no
-  third-party font requests.
-- **Polish** — more comfortable button spacing, better narrow-screen fitting,
-  usable short-landscape menus, clear keyboard focus, and a steady logo glow.
-- **Accessibility** — era filters use `aria-pressed`; results use `aria-live`;
-  the mobile menu supports Escape and `aria-expanded`. Native FAQ disclosures
-  and the call/text dialog remain. Content is visible if scroll reveals cannot
-  run, and reduced-motion preferences stop animation.
-- **Map** — preserves the original darkened Google Maps embed.
-- **Directions links** carry `data-directions`. The HTML href is a plain Google Maps
-  directions URL so it works with JS off and on desktop; a small script swaps it for
-  `maps://` on iOS and `geo:` on Android so phones hand off to whatever maps app the
-  person actually uses. Desktop is left alone deliberately — a Mac would otherwise
-  launch the Apple Maps app when someone just wanted a map in their browser.
-
-## The Instagram section
-
-Three hand-picked posts, listed in `instagram.json`, with square images in
-`assets/ig/`. No API, no token, no third-party requests. The page fetches
-`instagram.json` the same way it fetches `games.json`, so nothing about the
-markup changes when the API is eventually connected.
-
-**To swap a post by hand:** drop a square JPEG in `assets/ig/` (900x900 is what
-the existing ones are) and edit the matching entry in `instagram.json`. Keep the
-`alt` text descriptive; it's what a screen reader announces.
-
-**A caveat worth knowing:** all three tiles currently link to the profile rather
-than to the individual posts, because the post URLs weren't available when they
-were added. Paste the real `instagram.com/p/XXXX` URLs into `permalink` when you
-have them and the tiles will deep-link properly.
-
-**When the API is connected**, `tools/refresh-instagram.mjs` overwrites
-`instagram.json` and the images in `assets/ig/` on every deploy. The hand-picked
-set is a stand-in, not a fallback, so back these three up first if you want to
-keep them.
-
-### Image prep
-
-Tiles render at `aspect-ratio:1` with `object-fit:cover`, meaning the browser
-centre-crops anything that isn't square. The flyer was cropped from the top by
-hand so the logo and date survived; a centre crop had cut the logo in half. Worth
-remembering for any text-heavy image.
-
-## Phone links open a chooser
-
-Every `tel:` link on the page opens a small dialog offering **Call** or **Text**
-instead of dialling straight away, because plenty of people would rather text.
-There are three of them: the Contact row in Visit, the "Still stuck?" button in
-the FAQ, and the footer.
-
-It's progressive enhancement, same shape as the directions links. The `href` in
-the HTML is a real `tel:` link, so with JavaScript off, or in a browser without
-`<dialog>`, tapping the number just dials as it always did. The script only
-intercepts the click when it can actually show the chooser.
-
-**To change the number**, search `18044202188` — it appears in the three page
-links, twice inside the dialog (`tel:` and `sms:`), in the visible dialog text,
-and in the `telephone` field of the JSON-LD. Update all of them.
-
-> `sms:` is reliable on iOS and Android. On desktop it depends on whether the OS
-> has a handler registered, so a Windows visitor may find "Text" does nothing.
-> The number is shown as plain text in the dialog so it can always be copied.
+These are maintenance items; the committed content can be previewed without API credentials.

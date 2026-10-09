@@ -3,3 +3,16 @@
 deliverables/
 node_modules/
 _site/
+
+# Local credentials created by maintenance tools or environment setup.
+.ig-token-new
+.env
+.env.*
+
+# Keep safe, credential-free environment examples available to contributors.
+!.env.example
+!.env.sample
+!.env.template
+!.env.*.example
+!.env.*.sample
+!.env.*.template
