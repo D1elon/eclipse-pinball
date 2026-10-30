@@ -629,16 +629,17 @@ select.sort option{background:var(--panel);color:var(--text)}
     var(--ink);
   border-block:1px solid var(--line);
 }
-/* ---- featured event ---- */
+/* ---- tournaments ---- */
+.ev-list{display:grid;gap:1.2rem;margin-top:.5rem}
 .ev-featured{
   display:grid;grid-template-columns:auto 1fr;gap:2.2rem;
-  margin-top:.5rem;padding:2.2rem;border-radius:var(--r);position:relative;
+  padding:2.2rem;border-radius:var(--r);position:relative;
   background:rgba(255,47,142,.045);
   border:1px solid rgba(255,47,142,.3);
 }
 .date-block{
-  align-self:start;text-align:center;min-width:120px;
-  padding:1.1rem 1.2rem;border-radius:var(--r-sm);
+  align-self:start;text-align:center;width:132px;
+  padding:1.1rem .8rem;border-radius:var(--r-sm);
   background:rgba(5,4,12,.65);border:1px solid rgba(255,47,142,.28);
 }
 .date-block .mo{
@@ -678,20 +679,62 @@ select.sort option{background:var(--panel);color:var(--text)}
 }
 .ev-note{margin:1.4rem 0 0;font-size:var(--fs-body);color:var(--faint)}
 
+/* "Tomorrow" / "Tonight": lit, because it's the one thing that's urgent */
+.when-tag{
+  display:inline-block;margin:0 0 .75rem;padding:.16rem .55rem;border-radius:3px;
+  font-family:var(--mono);font-weight:400;font-size:var(--fs-micro);letter-spacing:var(--tr-label);
+  text-transform:uppercase;line-height:1.5;
+  background:var(--magenta);color:#1a0410;box-shadow:0 0 14px rgba(255,47,142,.45);
+}
+
+/* the flyer sits beside the details on wide screens and opens full size */
+.ev-featured.has-flyer{grid-template-columns:auto 1fr auto}
+.ev-flyer{
+  position:relative;display:block;width:200px;align-self:start;
+  border-radius:var(--r-sm);overflow:hidden;
+  border:1px solid rgba(255,47,142,.3);background:var(--panel);
+  transition:border-color .16s ease;
+}
+.ev-flyer picture{display:contents}
+.ev-flyer img{display:block;width:100%;height:auto}
+.ev-flyer-label{
+  position:absolute;inset:auto 0 0;padding:1.6rem .7rem .55rem;
+  background:linear-gradient(to top,rgba(5,4,12,.92),transparent);
+  font-family:var(--mono);font-weight:400;font-size:var(--fs-micro);letter-spacing:var(--tr-label);
+  text-transform:uppercase;color:var(--text);text-align:center;
+}
+@media(hover:hover){.ev-flyer:hover{border-color:var(--magenta)}}
+@media(max-width:1000px){
+  .ev-featured.has-flyer{grid-template-columns:auto 1fr}
+  .ev-flyer{grid-column:2;width:min(220px,100%)}
+}
+
+/* flyer lightbox, sharing the call-or-text dialog's close button */
+.lightbox{
+  padding:0;border:1px solid var(--line);border-radius:var(--r);background:#000;
+  max-width:min(92vw,640px);max-height:92vh;overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.8);
+}
+.lightbox::backdrop{background:rgba(3,2,9,.85);backdrop-filter:blur(3px)}
+.lightbox[open]{animation:ct-in .2s ease-out}
+.lightbox img{display:block;width:auto;height:auto;max-width:100%;max-height:calc(92vh - 2px)}
+.lightbox .ct-close{background:rgba(5,4,12,.75);color:#fff}
+
 /* Once data-ends has passed (see the JS at the bottom) the card stops
    competing for attention: it shrinks to a one-line record of the last
    tournament and drops the sign-up details nobody needs any more. */
 .ev-featured.past{
-  grid-template-columns:auto 1fr;align-items:center;gap:1.4rem;
+  grid-template-columns:auto 1fr;align-items:center;gap:1.4rem;justify-self:start;
   padding:1.2rem 2.4rem 1.2rem 1.4rem;background:transparent;border-color:var(--line);
   width:fit-content;max-width:100%;
 }
-.ev-featured.past .date-block{min-width:84px;padding:.6rem .8rem;border-color:var(--line)}
+.ev-featured.past .date-block{width:84px;padding:.6rem .5rem;border-color:var(--line)}
 .ev-featured.past .date-block .day{font-size:1.9rem;color:var(--dim)}
 .ev-featured.past .date-block .mo{color:var(--faint)}
 .ev-featured.past .tag,
 .ev-featured.past .ev-detail,
-.ev-featured.past .ev-note{display:none}
+.ev-featured.past .ev-note,
+.ev-featured.past .ev-flyer{display:none}
 .ev-featured.past h3{font-size:1.2rem;margin:0 0 .2rem;color:var(--text)}
 .ev-featured.past .ev-lede{margin:0;font-size:var(--fs-body)}
 .past-tag{
@@ -701,9 +744,11 @@ select.sort option{background:var(--panel);color:var(--text)}
 }
 @media(max-width:720px){
   .ev-featured{grid-template-columns:1fr;gap:1.5rem;padding:1.6rem}
-  .date-block{justify-self:start;min-width:110px;padding:.9rem 1rem}
+  .date-block{justify-self:start;width:112px;padding:.9rem .6rem}
   .date-block .day{font-size:2.8rem}
   .ev-featured.past{grid-template-columns:auto 1fr;gap:1rem;padding:1rem 1.1rem}
+  .ev-featured.has-flyer{grid-template-columns:1fr}
+  .ev-flyer{grid-column:auto;width:min(260px,100%)}
 }
 
 /* ---- private events ---- */
