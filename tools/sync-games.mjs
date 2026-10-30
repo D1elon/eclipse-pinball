@@ -44,4 +44,13 @@ for (const id of ['synced', 'lineupChecked']) {
   replaceOne(new RegExp(`(id="${id}">)[^<]*`), (_, start) => start + checked);
 }
 await writeFile(target, html);
+// The home page changes when the lineup does, so its sitemap lastmod follows.
+const sitemap = new URL('sitemap.xml', root);
+try {
+  const xml = await readFile(sitemap, 'utf8');
+  const next = xml.replace(/(<loc>https:\/\/www\.eclipsepinball\.com\/<\/loc>\s*<lastmod>)[^<]*/, `$1${data.updated}`);
+  if (next !== xml) await writeFile(sitemap, next);
+} catch (err) {
+  if (err.code !== 'ENOENT') throw err;
+}
 console.log(`Synced fallback, counts, and checked date for ${data.machines.length} machines (${data.updated}).`);

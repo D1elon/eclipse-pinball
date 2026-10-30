@@ -25,7 +25,7 @@ for (const match of markup.matchAll(/(?:src|href)="([^"#]+)"/g)) {
 const css = await readFile(new URL('assets/site.css', root), 'utf8');
 for (const match of css.matchAll(/url\('([^']+)'\)/g)) paths.add(`assets/${match[1]}`);
 const documents = new Map([['index.html', html]]);
-for (const name of ['privacy.html', 'accessibility.html']) {
+for (const name of ['privacy.html', 'accessibility.html', '404.html']) {
   documents.set(name, await readFile(new URL(name, root), 'utf8'));
 }
 for (const [name, document] of documents) {
@@ -52,6 +52,15 @@ for (const [name, document] of documents) {
 }
 const workflow = await readFile(new URL('.github/workflows/deploy.yml', root), 'utf8');
 assert(/cp index\.html privacy\.html accessibility\.html/.test(workflow), 'Policy pages must be included in the Pages upload.');
+for (const file of ['404.html', 'robots.txt', 'sitemap.xml', 'favicon.ico']) {
+  assert(new RegExp(`cp [^\\n]*\\b${file.replace('.', '\\.')}\\b`).test(workflow), `${file} must be included in the Pages upload.`);
+  await access(new URL(file, root));
+}
+const robots = await readFile(new URL('robots.txt', root), 'utf8');
+assert(/Sitemap: https:\/\/www\.eclipsepinball\.com\/sitemap\.xml/.test(robots), 'robots.txt must point at the sitemap.');
+const sitemapXml = await readFile(new URL('sitemap.xml', root), 'utf8');
+assert(sitemapXml.includes(`<loc>https://www.eclipsepinball.com/</loc>\n    <lastmod>${data.updated}</lastmod>`), 'Run node tools/sync-games.mjs to update the sitemap date.');
+for (const match of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) JSON.parse(match[1]);
 const instagram = JSON.parse(await readFile(new URL('instagram.json', root), 'utf8'));
 for (const post of instagram.posts) paths.add(post.image);
 for (const path of paths) await access(new URL(path, root));
@@ -61,4 +70,4 @@ for (const id of ['bigCount', 'chipCount']) {
 assert(!html.includes('This list syncs from'), 'Do not promise a live roster.');
 assert(css.includes('[hidden]{display:none!important}'));
 assert(css.includes('prefers-reduced-motion'));
-console.log(`Validated ${data.machines.length} machines, embedded fallback, scripts, metadata, all ${documents.size} pages, local links/assets, and policy deployment coverage.`);
+console.log(`Validated ${data.machines.length} machines, embedded fallback, scripts, metadata, all ${documents.size} pages, local links/assets, crawl files, and deployment coverage.`);

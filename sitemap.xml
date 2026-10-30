@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The home page's lastmod follows games.json: tools/sync-games.mjs updates it
+     whenever the lineup's checked date changes. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.eclipsepinball.com/</loc>
+    <lastmod>2026-10-29</lastmod>
+  </url>
+  <url>
+    <loc>https://www.eclipsepinball.com/privacy.html</loc>
+    <lastmod>2026-09-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.eclipsepinball.com/accessibility.html</loc>
+    <lastmod>2026-09-10</lastmod>
+  </url>
+</urlset>
