@@ -35,11 +35,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
 
       # Skips cleanly when the secret hasn't been added yet, so the very first
       # deploy works before you've requested a Pinball Map token.
@@ -63,22 +63,22 @@ jobs:
 
       - name: Commit the lineup if it changed
         run: |
-          if git diff --quiet -- games.json index.html; then
+          if git diff --quiet -- games.json index.html sitemap.xml; then
             echo "Lineup unchanged — nothing to commit."
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add games.json index.html
+          git add games.json index.html sitemap.xml
           git commit -m "Refresh pinball lineup"
           git push
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
       - name: Collect public site files
         run: |
           mkdir -p _site
-          cp index.html privacy.html accessibility.html games.json instagram.json og-image.jpg CNAME _site/
+          cp index.html privacy.html accessibility.html 404.html robots.txt sitemap.xml favicon.ico games.json instagram.json og-image.jpg CNAME _site/
           cp -R assets _site/assets
 
       - name: Upload the site
@@ -88,4 +88,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
