@@ -38,6 +38,47 @@
 <link rel="preload" href="assets/fonts/share-tech-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
 
+<!-- Upcoming tournaments, for search. Keep in step with the event cards. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Event",
+      "name": "Horror House Ball",
+      "description": "Eclipse Pinball's monthly pinball tournament, Halloween edition. Costumes encouraged. $15 entry; sign-up at 6:00 PM, games start at 7:00 PM.",
+      "startDate": "2026-10-30T19:00:00-04:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "image": "https://www.eclipsepinball.com/og-image.jpg",
+      "location": {
+        "@type": "Place",
+        "name": "Eclipse Pinball",
+        "address": {"@type": "PostalAddress", "streetAddress": "1310 Altamont Ave", "addressLocality": "Richmond", "addressRegion": "VA", "postalCode": "23230", "addressCountry": "US"}
+      },
+      "organizer": {"@type": "Organization", "name": "Eclipse Pinball", "url": "https://www.eclipsepinball.com/"},
+      "offers": {"@type": "Offer", "price": "15", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://www.eclipsepinball.com/#events"}
+    },
+    {
+      "@type": "Event",
+      "name": "Mistress of the Mooncade",
+      "description": "Pinball tournament at Eclipse Pinball. Femmes and thems welcome. $15 entry; sign-up at 6:00 PM, games start at 7:00 PM.",
+      "startDate": "2026-11-13T19:00:00-05:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "image": "https://www.eclipsepinball.com/assets/events/mooncade-2026-11-13.jpg",
+      "location": {
+        "@type": "Place",
+        "name": "Eclipse Pinball",
+        "address": {"@type": "PostalAddress", "streetAddress": "1310 Altamont Ave", "addressLocality": "Richmond", "addressRegion": "VA", "postalCode": "23230", "addressCountry": "US"}
+      },
+      "organizer": {"@type": "Organization", "name": "Eclipse Pinball", "url": "https://www.eclipsepinball.com/"},
+      "offers": {"@type": "Offer", "price": "15", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://www.eclipsepinball.com/#events"}
+    }
+  ]
+}
+</script>
+
 
 <script type="application/ld+json">
 {
@@ -222,32 +263,69 @@
     <p class="lede">Tournament nights, familiar faces, and a little friendly competition.
       Find upcoming dates on <a href="https://www.instagram.com/eclipsepinball/" target="_blank" rel="noopener">Instagram</a>.</p>
 
-    <!-- FEATURED EVENT
-         To swap in the next tournament: update the copy below and change
-         data-ends to the display cutoff. This flyer gives no end time, so use
-         midnight after the event date; this is not an advertised end time.
-         After the cutoff the card shows a "Past event" tag. -->
-    <article class="ev-featured" data-ends="2026-09-12T00:00:00-04:00">
-      <div class="date-block" aria-hidden="true">
-        <span class="mo">Sep</span>
-        <span class="day">11</span>
-        <span class="yr">2026</span>
-      </div>
-      <div class="ev-body">
-        <p class="tag">Ladies Pinball Tournament</p>
-        <h3>Mistress of the Mooncade</h3>
-        <p class="ev-lede">Femmes and thems welcome.</p>
+    <!-- TOURNAMENTS
+         One <article class="ev-featured"> per event. data-date is the event's
+         day (YYYY-MM-DD) and drives the "Tomorrow" / "Tonight" tag, in Richmond
+         time. data-ends is when the card stops counting as upcoming: these
+         flyers give no end time, so it's midnight after the event, not an
+         advertised end time. Upcoming events show in date order; past ones
+         shrink to a "Last tournament" note below them, and only the most
+         recent past one stays visible. Add matching Event data to the
+         JSON-LD in the <head> when you add a card. -->
+    <div class="ev-list">
+      <article class="ev-featured" data-date="2026-10-30" data-ends="2026-10-31T00:00:00-04:00">
+        <div class="date-block" aria-hidden="true">
+          <span class="mo">Oct</span>
+          <span class="day">30</span>
+          <span class="yr">2026</span>
+        </div>
+        <div class="ev-body">
+          <p class="tag">Monthly tournament · Halloween</p>
+          <h3>Horror House Ball</h3>
+          <p class="ev-lede">Our monthly tournament is back for the first Horror House
+            Ball at our new location. Come in your favorite Halloween costume.</p>
 
-        <dl class="ev-detail">
-          <div><dt>Date</dt><dd><time datetime="2026-09-11">Friday, September 11</time></dd></div>
-          <div><dt>Sign-up</dt><dd>6:00 PM</dd></div>
-          <div><dt>Start</dt><dd>7:00 PM</dd></div>
-          <div><dt>Entry</dt><dd>$15</dd></div>
-        </dl>
+          <dl class="ev-detail">
+            <div><dt>Date</dt><dd><time datetime="2026-10-30">Friday, October 30</time></dd></div>
+            <div><dt>Sign-up</dt><dd>6:00 PM</dd></div>
+            <div><dt>Start</dt><dd>7:00 PM</dd></div>
+            <div><dt>Entry</dt><dd>$15</dd></div>
+          </dl>
 
-        <p class="ev-note">Eclipse Pinball · 1310 Altamont Avenue, Richmond, VA.</p>
-      </div>
-    </article>
+          <p class="ev-note">Eclipse Pinball · 1310 Altamont Avenue, Richmond, VA.</p>
+        </div>
+      </article>
+
+      <article class="ev-featured has-flyer" data-date="2026-11-13" data-ends="2026-11-14T00:00:00-05:00">
+        <div class="date-block" aria-hidden="true">
+          <span class="mo">Nov</span>
+          <span class="day">13</span>
+          <span class="yr">2026</span>
+        </div>
+        <div class="ev-body">
+          <p class="tag">Pinball tournament</p>
+          <h3>Mistress of the Mooncade</h3>
+          <p class="ev-lede">Femmes and thems welcome.</p>
+
+          <dl class="ev-detail">
+            <div><dt>Date</dt><dd><time datetime="2026-11-13">Friday, November 13</time></dd></div>
+            <div><dt>Sign-up</dt><dd>6:00 PM</dd></div>
+            <div><dt>Start</dt><dd>7:00 PM</dd></div>
+            <div><dt>Entry</dt><dd>$15</dd></div>
+          </dl>
+
+          <p class="ev-note">Eclipse Pinball · 1310 Altamont Avenue, Richmond, VA.</p>
+        </div>
+        <a class="ev-flyer" href="assets/events/mooncade-2026-11-13.jpg" data-lightbox>
+          <picture>
+            <source type="image/webp" srcset="assets/events/mooncade-2026-11-13-600.webp 600w, assets/events/mooncade-2026-11-13-1200.webp 1200w" sizes="(max-width:720px) 260px, 200px">
+            <img src="assets/events/mooncade-2026-11-13-600.jpg" width="600" height="772" loading="lazy" decoding="async"
+                 alt="Flyer: Mistress of the Mooncade Pinball Tournament, November 13th. $15 entry, sign up at 6, games at 7. Femmes and thems welcome. Eclipse Pinball Arcade, 1310 Altamont Avenue.">
+          </picture>
+          <span class="ev-flyer-label">View flyer</span>
+        </a>
+      </article>
+    </div>
 
     <div class="private">
       <div class="private-body">
@@ -436,6 +514,15 @@
 </section>
 
 </main>
+
+<!-- Opened by event flyer links (a[data-lightbox]). Without JS, or without
+     <dialog>, the link just opens the image itself. -->
+<dialog class="lightbox" id="lightbox" aria-label="Event flyer">
+  <form method="dialog" class="ct-close-form">
+    <button class="ct-close" aria-label="Close">&#215;</button>
+  </form>
+  <img alt="">
+</dialog>
 
 <!-- Opened by every tel: link on the page. See the phoneChooser script. -->
 <dialog class="ct-dialog" id="phoneDialog" aria-labelledby="ctNum">
@@ -831,19 +918,71 @@
     });
   })();
 
-  /* ---------- featured event auto-expiry ----------
-     Once the event's data-ends timestamp has passed, dim the card and tag it
-     "Past event" so a site nobody has touched in a month doesn't keep
-     advertising a tournament that already happened. */
-  [].forEach.call(document.querySelectorAll('.ev-featured[data-ends]'), function(el){
-    var ends = new Date(el.getAttribute('data-ends'));
-    if (isNaN(ends) || ends >= new Date()) return;
-    el.classList.add('past');
-    var tag = document.createElement('span');
-    tag.className = 'past-tag';
-    tag.textContent = 'Last tournament';
-    el.querySelector('.ev-body').prepend(tag);
-  });
+  /* ---------- tournaments ----------
+     Upcoming events stay in date order at the top, and the one happening
+     today or tomorrow (in Richmond time) gets a tag. Once an event's
+     data-ends has passed it shrinks to a "Last tournament" note below the
+     upcoming ones; only the most recent past event stays visible, so a site
+     nobody has touched in a month never advertises a tournament that
+     already happened. */
+  (function events(){
+    var list = document.querySelector('.ev-list');
+    if (!list) return;
+    var now = new Date(), today = null, tomorrow = null;
+    try {
+      today = new Intl.DateTimeFormat('en-CA', {timeZone:'America/New_York', year:'numeric', month:'2-digit', day:'2-digit'}).format(now);
+      var t = new Date(today + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() + 1);
+      tomorrow = t.toISOString().slice(0, 10);
+    } catch (e) {}
+
+    var upcoming = [], past = [];
+    [].forEach.call(list.querySelectorAll('.ev-featured[data-ends]'), function(el){
+      var ends = new Date(el.getAttribute('data-ends'));
+      if (isNaN(ends)) return;
+      (ends < now ? past : upcoming).push(el);
+    });
+    function byDate(a, b){ return a.getAttribute('data-date') < b.getAttribute('data-date') ? -1 : 1; }
+    upcoming.sort(byDate);
+    past.sort(byDate).reverse();
+
+    function tag(el, cls, text){
+      var span = document.createElement('span');
+      span.className = cls; span.textContent = text;
+      el.querySelector('.ev-body').prepend(span);
+    }
+    upcoming.forEach(function(el){
+      list.appendChild(el);
+      var day = el.getAttribute('data-date');
+      if (day && day === today) tag(el, 'when-tag', 'Tonight');
+      else if (day && day === tomorrow) tag(el, 'when-tag', 'Tomorrow');
+    });
+    past.forEach(function(el, i){
+      list.appendChild(el);
+      el.classList.add('past');
+      if (i > 0) { el.hidden = true; return; }
+      tag(el, 'past-tag', 'Last tournament');
+    });
+  })();
+
+  /* ---------- flyer lightbox ---------- */
+  (function lightbox(){
+    var dlg = document.getElementById('lightbox');
+    if (!dlg || typeof dlg.showModal !== 'function') return;
+    var img = dlg.querySelector('img');
+    [].forEach.call(document.querySelectorAll('a[data-lightbox]'), function(a){
+      a.setAttribute('aria-haspopup', 'dialog');
+      a.addEventListener('click', function(e){
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+        e.preventDefault();
+        var thumb = a.querySelector('img');
+        img.src = a.getAttribute('href');
+        img.alt = thumb ? thumb.alt : '';
+        dlg.showModal();
+      });
+    });
+    dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', function(){ img.removeAttribute('src'); });
+  })();
 })();
 </script>
 </body>
