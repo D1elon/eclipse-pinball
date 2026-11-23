@@ -12,7 +12,6 @@
  *   1. Create a Meta app with the "Instagram API with Instagram Login" product
  *   2. Generate a long-lived access token for @eclipsepinball
  *   3. Add it as the repo secret INSTAGRAM_TOKEN
- *   See DEPLOY.md for the click-by-click.
  *
  * TOKEN LIFETIME
  *   Long-lived tokens last 60 days. This script refreshes on every run and

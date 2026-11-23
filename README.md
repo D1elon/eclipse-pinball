@@ -100,7 +100,7 @@ The `Deploy site` workflow runs on pushes to `main`, daily at 09:00 UTC, and on 
 
 If `PINBALL_MAP_TOKEN` is unavailable, the workflow keeps the committed lineup. An API failure also leaves the saved list in place.
 
-Keep the existing custom domain and Pages configuration when making content changes. `DEPLOY.md` contains the original setup notes; its DNS instructions describe the initial migration.
+Keep the existing custom domain and Pages configuration when making content changes.
 
 ## Credentials and maintenance
 
